@@ -86,6 +86,7 @@ func _process(delta: float) -> void:
 		if time_left <= 0:
 			time_left = 0
 			is_game_running = false
+			print("****** TIME UP 2")
 			emit_signal("time_up")
 
 func apply_penalty(seconds: float):
@@ -93,6 +94,7 @@ func apply_penalty(seconds: float):
 	emit_signal("time_changed", time_left)
 	
 	if time_left == 0 and is_game_running:
+		print("****** TIME UP 1")
 		is_game_running = false
 		emit_signal("time_up")
 
@@ -101,6 +103,7 @@ func lose_life():
 		lives -= 1
 		emit_signal("lives_changed", lives, max_lives)
 		if lives == 0:
+			print("****** GAME OVER ")
 			is_game_running = false
 			emit_signal("game_over")
 

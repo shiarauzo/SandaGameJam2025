@@ -5,7 +5,6 @@ signal level_cleared
 
 @onready var characters = $Personajes
 @onready var customer_scene := preload("res://scenes/characters/Customer.tscn")
-@onready var PauseBtn = $PauseBtn
 @export var pause_texture: Texture
 
 var characters_mood_file_path = "res://i18n/characters_moods.json"
@@ -22,12 +21,12 @@ func _ready():
 	add_to_group("levels")
 	original_viewport_size = get_viewport().size
 	get_viewport().connect("size_changed", Callable(self, "_on_viewport_resized"))
-	PauseBtn.connect("pressed", Callable(self, "_on_pause_pressed"))
-	
+		
 	# Música diferida
 	call_deferred("_start_level_music")
 	
 	# Cargar combinaciones y preparar cola
+	GameController.show_newton_layer()
 	var universe_combinations := get_random_combinations(characters_mood_file_path, customer_count)
 	GlobalManager.initialize_customers(universe_combinations)
 	spawn_next_customer()

@@ -33,7 +33,6 @@ func set_button_labels() -> void:
 			btn_jugar.get_node("CollisionPolygon2D/Label").text = labels["jugar"]
 			btn_opciones.get_node("CollisionPolygon2D/Label").text = labels["opciones"]
 			btn_creditos.get_node("CollisionPolygon2D/Label").text = labels["creditos"]
-			btn_salir.get_node("Label").text = labels["salir"]
 		else:
 			push_error("Idioma no encontrado en JSON: " + lang)
 	else:

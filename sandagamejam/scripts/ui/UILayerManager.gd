@@ -5,13 +5,11 @@ var ui_layer_scene = preload("res://scenes/ui/UILayer.tscn")
 var ui_layer_instance: CanvasLayer = null
 
 func init_ui_layer():
-	print("DEBUG.. INIT UI LAYER")
 	if not ui_layer_instance or not is_instance_valid(ui_layer_instance):
 		ui_layer_instance = ui_layer_scene.instantiate()
 		get_tree().root.call_deferred("add_child", ui_layer_instance)
 
 func show_hud():
-	print("SHOW HUD .. ")
 	if ui_layer_instance:
 		ui_layer_instance.call_deferred("show_hud")
 

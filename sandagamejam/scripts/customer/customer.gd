@@ -124,7 +124,6 @@ func _on_btn_listen_pressed() -> void:
 		print("⚠️ No hay cliente actual")
 		return
 		
-	print("GlobalManager.current_customer.genre", GlobalManager.current_customer)
 	AudioManager.play_customer_sfx(GlobalManager.current_customer.genre, GlobalManager.current_customer.mood_id)
 	emit_signal("listen_customer_pressed")
 

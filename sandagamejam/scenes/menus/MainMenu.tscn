@@ -127,13 +127,13 @@ offset_right = 1113.0
 offset_bottom = 105.0
 texture_normal = ExtResource("7_41ciy")
 
-[node name="Label" type="Label" parent="Salir"]
-visible = false
+[node name="VersionLabel" type="Label" parent="."]
 layout_mode = 0
-offset_left = -50.0
-offset_top = 30.0
-offset_bottom = 53.0
-text = "SALIR"
+offset_left = 1030.0
+offset_top = 591.0
+offset_right = 1099.0
+offset_bottom = 625.0
+text = "v0.5.0"
 label_settings = SubResource("LabelSettings_5crlr")
 
 [connection signal="input_event" from="Jugar" to="." method="_on_jugar_input_event"]

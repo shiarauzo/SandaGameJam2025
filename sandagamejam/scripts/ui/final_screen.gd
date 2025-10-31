@@ -119,17 +119,15 @@ func show_ranking():
 		ranking_container.add_child(player_label)
 	
 	var label = play_again_btn.get_node("Label")
-	print("label", menu_labels["play_again"])
 	label.text = menu_labels["play_again"] 
 	ranking_container.visible = true
-	play_again_btn.visible = true
+	#play_again_btn.visible = true
 	
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name == "final_sequence":
 		score_panel.visible = true
 		score_panel.modulate.a = 0
 		score_panel.create_tween().tween_property(score_panel, "modulate:a", 1.0, 0.4)
-
 
 func _on_btn_play_again_pressed() -> void:
 	queue_free()
