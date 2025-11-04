@@ -23,12 +23,18 @@ const SCREEN_WIDTH = 1152.0
 const SECONDS_TO_LOSE = 30
 const SECONDS_TO_LOSE_NOT_PREPARED = 42
 const SECONDS_TO_GAIN = 15
-	
+var LIVES = 3#to test 1
+var MAX_LIVES = 4#to test 2
+var ING_ARR_SIZE = 20 #Debe disminuir si el nivel aumenta
+var TIME_LEFT = 180.0
+var global_ranking: Array = []
+
 var is_success: bool = false
 var current_level: Node = null
 var current_minigame: Node = null
 var newton_original_scale: Vector2 = Vector2(0.22, 0.22)
 var newton_original_pos: Vector2 = Vector2(978.0, 472)
+var pending_final_state : Variant = null
 
 # Diccionario de equivalencias normales → gravitacionales
 var gravitational_equivalents = {
@@ -212,6 +218,9 @@ func show_netown_feedback():
 	continue_btn_label.text = GlobalManager.btn_continuar_label
 	continue_button.visible = true
 
+func hide_continue_btn():
+	continue_button.visible = false
+
 func check_recipe() -> Dictionary:
 	var selected_recipe_ingredients = GlobalManager.selected_recipe_data["ingredients"]
 	var selected_recipe_mood = GlobalManager.selected_recipe_data["mood"]
@@ -355,6 +364,29 @@ func apply_recipe_result(result: Dictionary, show_sprite: bool = false, delayed:
 	if show_sprite and sprite:
 		sprite.visible = false
 
+# Controles
+
+func reset_game():
+	print("reseteando nivel...")
+	# Reset de variables globales (vidas, tiempo, arrays…)
+	GlobalManager.reset()
+	
+	# Cargar nivel inicial
+	load_level("res://scenes/levels/PastryLevel1.tscn")
+	
+	# Reset de UI
+	UILayerManager.init_ui_layer()
+	UILayerManager.show_hud()
+	
+	if UILayerManager.ui_layer_instance:
+		UILayerManager.ui_layer_instance.reset_timer_colors()
+	
+	# Reset mensajes globales
+	if feedback_message:
+		feedback_message.text = ""
+	if outcome_message:
+		outcome_message.text = ""
+	
 # Senales
 func _on_ingredients_minigame_timeout():
 	# Obtener los resultados
@@ -375,7 +407,7 @@ func _on_minigame_hidden():
 func _on_continue_btn_pressed() -> void:
 	feedback_message.visible = false
 	outcome_message.visible = false
-	continue_button.visible = false
+	hide_continue_btn()
 	
 	# Restaurar Newton
 	reset_newton_ready()
@@ -383,6 +415,9 @@ func _on_continue_btn_pressed() -> void:
 	finish_minigame()
 	# Avisar al nivel que muestre reacción del cliente
 	get_tree().call_group("levels", "show_customer_reaction", is_success)
+	
+	if pending_final_state != null:
+		_go_to_final_screen()
 
 func _cleanup_minigames():
 	# Liberar lo que esté dentro del overlay
@@ -396,17 +431,20 @@ func _cleanup_minigames():
 	GlobalManager.selected_recipe_idx = -1
 
 func _on_level_cleared():
-	#print("Nivel completado desde GameController")
+	print(">>>> Nivel completado desde GameController")
 	GlobalManager.check_win_condition()
 
 func _on_win():
-	load_final_screen(GlobalManager.GameState.WIN)
+	_prepare_final(GlobalManager.GameState.WIN)
+	#load_final_screen(GlobalManager.GameState.WIN)
 	
 func _on_time_up():
-	load_final_screen(GlobalManager.GameState.TIMEUP)
+	_prepare_final(GlobalManager.GameState.TIMEUP)
+	#load_final_screen(GlobalManager.GameState.TIMEUP)
 
 func _on_game_over():
-	load_final_screen(GlobalManager.GameState.GAMEOVER)
+	_prepare_final(GlobalManager.GameState.GAMEOVER)
+	#load_final_screen(GlobalManager.GameState.GAMEOVER)
 
 func _on_overlay_minigame_started():
 	emit_signal("ingredients_minigame_started")
@@ -415,16 +453,52 @@ func _on_overlay_minigame_timeout():
 	emit_signal("ingredients_minigame_timeout")
 	_on_ingredients_minigame_timeout() # sigue llamando tu lógica actual
 
-func load_final_screen(state: GlobalManager.GameState):
-	newton_layer.visible = false
+func _prepare_final(state: GlobalManager.GameState):
+	print("preparing... ", state )
+	pending_final_state = state
 	
-	# Limpia si ya había algo
+	# Mostrar feedback (si el overlay está visible)
+	if GlobalManager.is_minigame_overlay_visible:
+	#	is_success = (state == GlobalManager.GameState.WIN)
+		show_netown_feedback()
+	else:
+		_go_to_final_screen()
+
+func _go_to_final_screen():
+	load_final_screen(pending_final_state)
+	pending_final_state = null
+	
+func load_final_screen(state: GlobalManager.GameState):
+	# 1 Ocultar Newton, no eliminar el minijuego aun
+	newton_layer.visible = false
+	#if current_minigame and is_instance_valid(current_minigame):
+	#	current_minigame.visible = false
+	
+	# 2️ Limpiar pantalla final previa
 	if final_screen and is_instance_valid(final_screen):
 		final_screen.queue_free()
-	
-	# Instancia la pantalla final
+		
+	# 3️ Instanciar pantalla final
 	final_screen = load("res://scenes/ui/FinalScreen.tscn").instantiate()
 	overlay_layer.add_child(final_screen)
 	
-	# Mostrar la pantalla según el estado ("win", "time_up", "game_over")
+	# 4 Fade in
+	final_screen.modulate = Color(1,1,1,0)
+	var tween = create_tween()
+	tween.tween_property(final_screen, "modulate:a", 1.0, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
+	# 5 Mostrar la pantalla según el estado ("win", "time_up", "game_over")
 	final_screen.show_final_screen(state)
+	
+	# 6 Limpiar minijuegos y resetear Newton **después** de fade-in
+	tween.finished.connect(func():
+		print("TWEEN FINISHED")
+		#_cleanup_minigames()
+		#hide_continue_btn()
+		
+		# Restaurar Newton
+		#reset_newton_ready()
+		# Ocultar minijuegos
+		#finish_minigame()
+	
+	)

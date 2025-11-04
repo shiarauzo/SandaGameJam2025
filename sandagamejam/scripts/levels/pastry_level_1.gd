@@ -5,12 +5,11 @@ signal level_cleared
 
 @onready var characters = $Personajes
 @onready var customer_scene := preload("res://scenes/characters/Customer.tscn")
-@onready var PauseBtn = $PauseBtn
 @export var pause_texture: Texture
 
 var characters_mood_file_path = "res://i18n/characters_moods.json"
 var interact_btns_file_path = "res://i18n/interaction_texts.json"
-var customer_count = 2#4
+var customer_count = 1#4
 var current_customer: Node2D = null
 
 var center_frac_x := 0.5 # 0.25 cuando se abra el minijuego
@@ -18,16 +17,20 @@ var original_viewport_size: Vector2
 
 # Escena del nivel base
 func _ready():
+	print("ready from LEVEL 1********")
 	add_to_group("levels")
 	original_viewport_size = get_viewport().size
 	get_viewport().connect("size_changed", Callable(self, "_on_viewport_resized"))
-	PauseBtn.connect("pressed", Callable(self, "_on_pause_pressed"))
+		
+	# Música diferida
+	call_deferred("_start_level_music")
+	
 	# Cargar combinaciones y preparar cola
+	GameController.show_newton_layer()
 	var universe_combinations := get_random_combinations(characters_mood_file_path, customer_count)
 	GlobalManager.initialize_customers(universe_combinations)
 	AudioManager.play_crowd_talking_sfx()
 	spawn_next_customer()
-	
 	GlobalManager.initialize_recipes("level1")
 
 func spawn_next_customer():
@@ -129,6 +132,11 @@ func _on_viewport_resized():
 		current_customer.position.x = new_target.x
 		current_customer.position.y = new_target.y
 
+func _start_level_music():
+	AudioManager.stop_end_music()
+	AudioManager.play_game_music()
+	AudioManager.play_crowd_talking_sfx()
+	
 # Debug :]
 func print_combos(combos):
 	for comb in combos:

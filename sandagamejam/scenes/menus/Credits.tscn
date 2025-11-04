@@ -1,71 +1,74 @@
-[gd_scene load_steps=5 format=3 uid="uid://ecskbidj06cr"]
+[gd_scene load_steps=4 format=3 uid="uid://ecskbidj06cr"]
 
-[ext_resource type="Script" uid="uid://c2yno5nwb6hlr" path="res://credits.gd" id="1_g4wvt"]
-[ext_resource type="Texture2D" uid="uid://ctcgekq2gtx1v" path="res://assets/UI/back.png" id="2_c1t8d"]
+[ext_resource type="Script" uid="uid://c2yno5nwb6hlr" path="res://scripts/credits.gd" id="1_g4wvt"]
+[ext_resource type="Texture2D" uid="uid://ctcgekq2gtx1v" path="res://assets/ui/back.png" id="2_c1t8d"]
 [ext_resource type="Texture2D" uid="uid://bp4takne0jvo1" path="res://assets/backgrounds/credits_bg.png" id="2_d2vv3"]
-[ext_resource type="Theme" uid="uid://b43q23bmf727" path="res://custom_resources/Credits.tres" id="3_5jxb4"]
 
 [node name="Credits" type="Control"]
 layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+script = ExtResource("1_g4wvt")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_g4wvt")
-
-[node name="Background" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
 texture = ExtResource("2_d2vv3")
 
-[node name="Label" type="Label" parent="."]
-layout_mode = 1
-offset_left = 455.0
-offset_top = 112.0
-offset_right = 592.0
-offset_bottom = 160.0
-scale = Vector2(1.5, 1.5)
-theme = ExtResource("3_5jxb4")
-text = "Créditos"
-horizontal_alignment = 1
-
-[node name="close_button" type="TextureButton" parent="."]
-layout_mode = 0
-offset_left = 286.0
-offset_top = 521.0
-offset_right = 335.0
-offset_bottom = 571.0
-texture_normal = ExtResource("2_c1t8d")
-
-[node name="close" type="Label" parent="close_button"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 2
-offset_left = 288.0
-offset_top = 180.0
-offset_right = 877.0
-offset_bottom = 488.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
-visible = false
+custom_minimum_size = Vector2(562, 444)
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.299
-anchor_top = 0.291
-anchor_right = 0.696
-anchor_bottom = 0.748
-offset_left = -0.448029
-offset_top = -8.56801
-offset_right = 2.20795
-offset_bottom = 3.29599
+anchor_left = 0.259
+anchor_top = 0.15
+anchor_right = 0.259
+anchor_bottom = 0.15
+offset_left = -0.368011
+offset_top = -0.200005
+offset_right = 571.632
+offset_bottom = 443.8
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+custom_minimum_size = Vector2(560, 444)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="TeamName" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="MemberBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RolesBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="ThanksBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="close_button" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.234
+anchor_top = 0.804
+anchor_right = 0.234
+anchor_bottom = 0.804
+offset_left = -0.568024
+offset_top = 0.00799561
+offset_right = 48.432
+offset_bottom = 50.008
+texture_normal = ExtResource("2_c1t8d")
 
 [connection signal="pressed" from="close_button" to="." method="_on_close_button_pressed"]

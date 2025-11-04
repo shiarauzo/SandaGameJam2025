@@ -33,7 +33,6 @@ func set_button_labels() -> void:
 			btn_jugar.get_node("CollisionPolygon2D/Label").text = labels["jugar"]
 			btn_opciones.get_node("CollisionPolygon2D/Label").text = labels["opciones"]
 			btn_creditos.get_node("CollisionPolygon2D/Label").text = labels["creditos"]
-			btn_salir.get_node("Label").text = labels["salir"]
 		else:
 			push_error("Idioma no encontrado en JSON: " + lang)
 	else:
@@ -57,9 +56,6 @@ func _on_creditos_input_event(_viewport: Node, event: InputEvent, _shape_idx: in
 		AudioManager.play_click_sfx()
 		var credits_modal = preload("res://scenes/menus/Credits.tscn").instantiate()
 		add_child(credits_modal)
-		
-		#var credits_scene = load("res://scenes/menus/Credits.tscn")
-		#get_tree().change_scene_to_packed(credits_scene)
 
 func _on_opciones_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.pressed:

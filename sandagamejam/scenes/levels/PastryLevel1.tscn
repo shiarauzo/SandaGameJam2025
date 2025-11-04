@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://c360ti54la3sr"]
+[gd_scene load_steps=4 format=3 uid="uid://c360ti54la3sr"]
 
 [ext_resource type="Script" uid="uid://6p3dcvi4f7xk" path="res://scripts/levels/pastry_level_1.gd" id="1_aov3q"]
 [ext_resource type="Texture2D" uid="uid://2n1ol4pwkj0p" path="res://assets/backgrounds/level1.png" id="2_aov3q"]
 [ext_resource type="Texture2D" uid="uid://b3o45f2hwvneh" path="res://assets/backgrounds/mesa.png" id="2_ld2p3"]
-[ext_resource type="Texture2D" uid="uid://blhi537qcthh0" path="res://assets/ui/pause_btn.png" id="3_aov3q"]
 
 [node name="PastryLevel1" type="Node2D"]
 script = ExtResource("1_aov3q")
@@ -29,11 +28,3 @@ expand_mode = 1
 
 [node name="UILayer" type="CanvasLayer" parent="."]
 layer = 2
-
-[node name="PauseBtn" type="TextureButton" parent="."]
-visible = false
-offset_left = 1069.0
-offset_top = 27.0
-offset_right = 1118.0
-offset_bottom = 76.0
-texture_normal = ExtResource("3_aov3q")

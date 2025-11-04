@@ -1,0 +1,186 @@
+{
+  "general": {
+	"team_name": "The Glitch Girls",
+	"members": [
+	  {
+		"name": "Selene Negrón",
+		"socials": [
+			{
+				"type": "instagram",
+				"url": "https://instagram.com/yubae_2mu"
+		}]
+	  },
+	  {
+		"name": "Ariadna Mestanza",
+		"socials": [{
+		  "type": "instagram",
+			"url": "https://instagram.com/yellow_fx"
+		}]
+	  },
+	  {
+		"name": "Melissa Huerta",
+		"socials": [{
+		  "type": "github", "url": "https://github.com/melissahuertadev"},
+		  {"type": "instagram", "url": "https://instagram.com/melissahuerta.dev"
+		}]
+	  },
+	  {
+		"name": "Shiara Arauzo",
+		"socials": [{
+		  "type": "instagram", "url": "https://instagram.com/the.research.blog"
+		}]
+	  },
+	  {
+		"name": "Malu Munayco",
+		"socials": [{
+		  "type": "github", "url": "https://github.com/malumunayco"
+		}]
+	  },
+	  {
+		"name": "Fabrizio Murguia",
+		"socials": [{
+		  "type": "instagram", "url":  "https://instagram.com/justfabbeingfab"
+		}]
+	  }
+	],
+	"roles": [
+	  { "key": "concept_art", "people": ["Selene Negrón", "Ariadna Mestanza"] },
+	  { "key": "2d_art", "people": ["Selene Negrón", "Ariadna Mestanza"] },
+	  { "key": "game_dev", "people": ["Melissa Huerta", "Shiara Arauzo", "Malu Munayco"] },
+	  { "key": "tech_design", "people": ["all_team"] },
+	  { "key": "game_design", "people": ["all_team"] }
+	]
+	},
+	"es": {
+		"labels": {
+		  "members": "Integrantes",
+		  "roles": "Roles",
+		  "special_thanks": "Agradecimientos Especiales",
+		  "resources": "Recursos Externos",
+		  "all_team": "Todo el equipo"
+		},
+		"roles_titles": {
+			"concept_art": "Concept Art",
+			"2d_art": "Arte 2D",
+			"game_dev": "Desarrollo de Juego",
+			"tech_design": "Diseño Técnico",
+			"game_design": "Diseño de Juego"
+		},
+		"special_thanks": {
+		  "music": {
+			"text": "Música compuesta por @adriangtrrz",
+			"authors": [
+				{ "name": "adriangtrrz", "url": "https://soundcloud.com/adriangtrrz" }
+			]
+		  }
+		},
+		"resources": [
+		  {
+			"text": "Efectos de sonido en Pixabay: @freesound_community, @Soundhunterin",
+			"authors": [
+			  {
+				"name": "freesound_community",
+				"url": "https://pixabay.com/users/freesound_community"
+			  },
+			  {
+				"name": "Soundhunterin",
+				"url": "https://pixabay.com/users/soundhunterin"
+			  }
+			]
+		  },
+		  {
+			"text": "Efectos de sonido en Freesound (CC0): @u_viypcpsnud, @1Kaylin_Dickson, @Sadiquecat, @khenshom",
+			"authors": [
+			  { "name": "u_viypcpsnud", "url": "https://freesound.org/people/u_viypcpsnud" },
+			  { "name": "1Kaylin_Dickson", "url": "https://freesound.org/people/1Kaylin_Dickson" },
+			  { "name": "Sadiquecat", "url": "https://freesound.org/people/Sadiquecat" },
+			  { "name": "khenshom", "url": "https://freesound.org/people/khenshom" }
+			]
+		  }
+		]
+  },
+  "en": {
+	"labels": {
+	  "members": "Members",
+	  "roles": "Roles",
+	  "special_thanks": "Special Thanks",
+	  "resources": "External Resources",
+	  "all_team": "All team"
+	},
+	"roles_titles": {
+	  "concept_art": "Concept Art",
+	  "2d_art": "2D Art",
+	  "game_dev": "Game Development",
+	  "tech_design": "Technical Design",
+	  "game_design": "Game Design"
+	},
+	"special_thanks": {
+	  "music": {
+		"text": "Music composed by @adriangtrrz",
+		"authors": [
+		  { "name": "adriangtrrz", "url": "https://soundcloud.com/adriangtrrz" }
+		]
+	  }
+	},
+	"resources": [
+	  {
+		"text": "Sound effects from Pixabay: @freesound_community, @Soundhunterin",
+		"authors": [
+		  { "name": "freesound_community", "url": "https://pixabay.com/users/freesound_community" },
+		  { "name": "Soundhunterin", "url": "https://pixabay.com/users/soundhunterin" }
+		]
+	  },
+	  {
+		"text": "Sound effects from Freesound (CC0): @u_viypcpsnud, @1Kaylin_Dickson, @Sadiquecat, @khenshom",
+		"authors": [
+		  { "name": "u_viypcpsnud", "url": "https://freesound.org/people/u_viypcpsnud" },
+		  { "name": "1Kaylin_Dickson", "url": "https://freesound.org/people/1Kaylin_Dickson" },
+		  { "name": "Sadiquecat", "url": "https://freesound.org/people/Sadiquecat" },
+		  { "name": "khenshom", "url": "https://freesound.org/people/khenshom" }
+		]
+	  }
+	]
+  },
+  "fr": {
+	 "labels": {
+	  "members": "Membres",
+	  "roles": "Rôles",
+	  "special_thanks": "Remerciements spéciaux",
+	  "resources": "Ressources externes",
+	  "all_team": "Toute l'équipe"
+	},
+	"roles_titles": {
+	  "concept_art": "Concept Art",
+	  "2d_art": "Art 2D",
+	  "game_dev": "Développement du Jeu",
+	  "tech_design": "Conception Technique",
+	  "game_design": "Conception du Jeu"
+	},
+	"special_thanks": {
+	  "music": {
+		"text": "Musique composée par @adriangtrrz",
+		"authors": [
+		  { "name": "adriangtrrz", "url": "https://soundcloud.com/adriangtrrz" }
+		]
+	  }
+	},
+	"resources": [
+	  {
+		"text": "Effets sonores sur Pixabay : @freesound_community, @Soundhunterin",
+		"authors": [
+		  { "name": "freesound_community", "url": "https://pixabay.com/users/freesound_community" },
+		  { "name": "Soundhunterin", "url": "https://pixabay.com/users/soundhunterin" }
+		]
+	  },
+	  {
+		"text": "Effets sonores sur Freesound (CC0) : @u_viypcpsnud, @1Kaylin_Dickson, @Sadiquecat, @khenshom",
+		"authors": [
+		  { "name": "u_viypcpsnud", "url": "https://freesound.org/people/u_viypcpsnud" },
+		  { "name": "1Kaylin_Dickson", "url": "https://freesound.org/people/1Kaylin_Dickson" },
+		  { "name": "Sadiquecat", "url": "https://freesound.org/people/Sadiquecat" },
+		  { "name": "khenshom", "url": "https://freesound.org/people/khenshom" }
+		]
+	  }
+	]
+  }
+}

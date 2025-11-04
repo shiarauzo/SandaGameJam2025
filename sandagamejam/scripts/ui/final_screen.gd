@@ -10,6 +10,7 @@ extends Control
 @onready var score_label = $ScoreContainer/Score
 @onready var name_label = $ScoreContainer/Name
 @onready var ranking_container = $RankingContainer
+@onready var play_again_btn = $BtnPlayAgain
 @onready var recipe_texture = $Recipe
 
 # Preloads de texturas
@@ -26,8 +27,7 @@ var score: int = 100
 var max_name_length: int = 6
 var current_name: Array = []
 var ranking: Array = []
-var ranking_labels = GlobalManager.menu_labels[GlobalManager.game_language]
-var final_screen_labels = GlobalManager.menu_labels[GlobalManager.game_language]
+var menu_labels = GlobalManager.menu_labels[GlobalManager.game_language]
 var settings_instance = preload("res://custom_resources/Ranking.tres").duplicate()
 
 func _ready():
@@ -40,7 +40,7 @@ func _ready():
 	settings_instance.font_size = 50
 	message_label.label_settings = settings_instance
 
-	score_label.text = ranking_labels["ranking"]["score"] + " " + str(score)
+	score_label.text = menu_labels["ranking"]["score"] + " " + str(score)
 	show_name_label()
 	
 func _input(event: InputEvent) -> void:
@@ -71,18 +71,18 @@ func show_final_screen(state: GlobalManager.GameState):
 		GlobalManager.GameState.TIMEUP:
 			bg.texture = bg_fail
 			newton.texture = newton_fail
-			message_label.text = ranking_labels["final_screen"]["time_up"]
+			message_label.text = menu_labels["final_screen"]["time_up"]
 			AudioManager.play_time_up_sfx()
 		GlobalManager.GameState.WIN:
 			bg.texture = bg_win
 			recipe_texture.texture = recipe_win
 			newton.texture = newton_win
-			message_label.text = ranking_labels["final_screen"]["win"]
+			message_label.text = menu_labels["final_screen"]["win"]
 			AudioManager.play_win_sfx()
 		GlobalManager.GameState.GAMEOVER:
 			bg.texture = bg_fail
 			newton.texture = newton_fail
-			message_label.text = ranking_labels["final_screen"]["game_over"]
+			message_label.text = menu_labels["final_screen"]["game_over"]
 			AudioManager.play_game_over_sfx()
 	
 	anim.play("final_sequence")
@@ -94,7 +94,7 @@ func show_name_label():
 			display += current_name[i] + ""
 		else:
 			display += "_ "
-	name_label.text =  ranking_labels["ranking"]["name"] + "\n" + display 
+	name_label.text =  menu_labels["ranking"]["name"] + "\n" + display 
 
 func store_in_ranking(username: String, score_value: int):
 	ranking.append({"name": username, "score": score_value})
@@ -113,15 +113,23 @@ func show_ranking():
 	# Crear un label por cada item en ranking
 	for i in range(ranking.size()):
 		var entry = ranking[i]
-		var label = Label.new()
-		label.text = str(i+1)+". " + entry.name +" - " + str(entry.score)
-		label.label_settings = ranking_label_settings
-		ranking_container.add_child(label)
-		
+		var player_label = Label.new()
+		player_label.text = str(i+1)+". " + entry.name +" - " + str(entry.score)
+		player_label.label_settings = ranking_label_settings
+		ranking_container.add_child(player_label)
+	
+	var label = play_again_btn.get_node("Label")
+	label.text = menu_labels["play_again"] 
 	ranking_container.visible = true
+	#play_again_btn.visible = true
 	
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name == "final_sequence":
 		score_panel.visible = true
 		score_panel.modulate.a = 0
 		score_panel.create_tween().tween_property(score_panel, "modulate:a", 1.0, 0.4)
+
+func _on_btn_play_again_pressed() -> void:
+	queue_free()
+	AudioManager.play_click_sfx()
+	GameController.reset_game()

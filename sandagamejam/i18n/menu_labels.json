@@ -17,7 +17,8 @@
 				"win": "¡Bien!",
 				"time_up": "¡Tiempo!",
 				"game_over": "¡Ay no! :(",
-			}
+			},
+			"play_again": "Volver a jugar"
 		},
 	"en":
 		{
@@ -37,7 +38,8 @@
 				"win": "Win!",
 				"time_up": "Time's up!",
 				"game_over": "Oh no! :(",
-			}
+			},
+			"play_again": "Play again"
 		},
 	"fr":
 		{
@@ -57,6 +59,7 @@
 				"win": "Bravo!",
 				"time_up": "Trop!",
 				"game_over": "Oh non :("
-			}
+			},
+			"play_again": "Rejouer"
 		}
 }

@@ -120,6 +120,10 @@ func react_happy():
 	
 func _on_btn_listen_pressed() -> void:
 	AudioManager.play_click_sfx()
+	if GlobalManager.current_customer.is_empty():
+		print("⚠️ No hay cliente actual")
+		return
+		
 	AudioManager.play_customer_sfx(GlobalManager.current_customer.genre, GlobalManager.current_customer.mood_id)
 	emit_signal("listen_customer_pressed")
 

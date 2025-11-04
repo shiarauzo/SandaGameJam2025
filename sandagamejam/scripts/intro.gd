@@ -9,7 +9,8 @@ var json_texts = {
 		[
 			"¡Bienvenido a mi cafeteria! Te preguntarás qué hace Isaac Newton con un mandil y preparando pasteles.",
 			"Pues, descubrí mi pasión por la pastelería cuando me cayó una manzana en la cabeza mientras descansaba bajo un manzanero.",
-			"Durante los siguientes minutos, llegaran mis mejores clientes para degustar de mis deliciosas preparaciones a base de mi fruta favorita, la manzana. ¡Es hora de abrir!, aquí viene nuestro primer comensal "
+			"Durante los siguientes minutos, llegaran mis mejores clientes para degustar de mis deliciosas preparaciones a base de mi fruta favorita, la manzana.",
+			"¡Es hora de abrir!, aquí viene nuestro primer comensal "
 		],
 	"en":
 		[

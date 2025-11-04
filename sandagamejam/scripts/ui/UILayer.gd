@@ -73,6 +73,7 @@ func _ready() -> void:
 
 
 func show_hud():
+	visible = true
 	if not game_hud:
 		return
 
@@ -127,6 +128,12 @@ func invest_label_colors():
 		timer_label.add_theme_color_override("font_color", outline_color)
 		timer_label.add_theme_color_override("font_outline_color", font_color)
 		timer_label.add_theme_constant_override("outline_size", 6)
+
+func reset_timer_colors():
+	if timer_label:
+		timer_label.add_theme_color_override("font_color", Color("#a79e91"))
+		timer_label.add_theme_color_override("font_outline_color", Color("#19211f"))
+		timer_label.add_theme_constant_override("outline_size", 10)
 
 # Ayudar al cliente
 func _on_btn_help_pressed() -> void:
