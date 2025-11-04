@@ -114,7 +114,7 @@ func start_ingredient_minigame():
 	btn_prepare.visible = true
 
 func animate_ingredients(ingr_loop: Array) -> void:
-	#print("EMPEZAR A RECOLECTAR INGREDIENTES!!! ", ingr_loop)
+	print("EMPEZAR A RECOLECTAR INGREDIENTES!!! ", ingr_loop)
 	var container := recollect_container
 	clear_children_except_bowl(container)
 

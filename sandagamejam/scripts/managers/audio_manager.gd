@@ -132,7 +132,6 @@ func play_newton_humming_sfx():
 	else:
 		push_warning("SFXNewtonHumming no está asignado o no existe en AudioManager")
 
-
 func stop_whisking_sfx():	
 	if sfx_whisking and sfx_whisking.playing:
 		sfx_whisking.stop()
