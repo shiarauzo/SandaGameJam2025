@@ -1,4 +1,3 @@
-# GlobalManager.gd
 extends Node
 
 signal lives_changed(new_lives, maxi)
