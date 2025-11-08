@@ -73,7 +73,7 @@ func fill_ingredients_textrect(instance: Node) -> void:
 		tex_rect.custom_minimum_size = Vector2(40, 40)
 
 		var label = Label.new()
-		label.text = "x 1"
+		label.text = "x1"
 
 		var hbox = HBoxContainer.new()
 		hbox.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -96,14 +96,14 @@ func show_ingredients_textrect() -> Node:
 	var scene = preload("res://scenes/minigames/IngredientsMenu.tscn")
 	var instance = scene.instantiate()
 	
-	var root = get_parent() # MinigameOverlay está instanciado dentro de PastryLevel
+	var root = get_parent() # ubicado en pastry level.tscn
 	if root:
 		root.add_child(instance)
 		instance.position = Vector2(100,45)
 		instance.visible = true
 		return instance
 	else:
-		print(" No se encontró el nodo padre para agregar el TextRect")
+		print("No se encontró el nodo padre para agregar el TextRect")
 		return null
 
 func show_selected_recipe(idx: int) -> void:
@@ -126,7 +126,7 @@ func load_menu_data() -> void:
 		var recipe_id = recipe_data["id"]
 		var path = "res://assets/pastry/recipes/%s.png" % recipe_id
 		if not ResourceLoader.exists(path):
-			print("⚠️ No existe asset:", path)
+			print("No existe asset:", path)
 			continue
 		
 		var tex = load(path)
