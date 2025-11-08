@@ -1,5 +1,7 @@
 extends Control
 
+@export var leaderboard_internal_name: String
+
 @onready var anim = $AnimationPlayer
 @onready var bg = $Background
 @onready var message = $Message
@@ -57,9 +59,10 @@ func _input(event: InputEvent) -> void:
 				show_name_label()
 			# Borrar letra
 		elif event.keycode == KEY_ENTER and current_name.size() > 0 and not name_entered:
-				store_in_ranking("".join(current_name), score)
-				show_ranking()
-				name_entered = true
+			load_entries_from_talo()
+			store_in_talo("".join(current_name), score)
+			show_ranking()
+			name_entered = true
 	
 # state puede ser: "win", "lose", "timeup"
 func show_final_screen(state: GlobalManager.GameState):
@@ -95,28 +98,36 @@ func show_name_label():
 		else:
 			display += "_ "
 	name_label.text =  menu_labels["ranking"]["name"] + "\n" + display 
+	
+# Talo Calls
+func store_in_talo(username: String, score_value: int) -> void:
+	print("to store in talo... ", username, " ", score_value)
+	await Talo.players.identify("username", username)
+	var res := await Talo.leaderboards.add_entry(leaderboard_internal_name, score_value)
+	_build_entries()
 
-func store_in_ranking(username: String, score_value: int):
-	ranking.append({"name": username, "score": score_value})
-	# Ordenar de mayor a menor score
-	ranking.sort_custom(func(a, b): return b.score - a.score)
-	if ranking.size() > 10:
-		ranking = ranking.slice(0, 10)
+func load_entries_from_talo() -> void:
+	var page = 0
+	var done = false
 
+	while !done:
+		var options := Talo.leaderboards.GetEntriesOptions.new()
+		options.page = page
+		var res := await Talo.leaderboards.get_entries(leaderboard_internal_name, options)
+		var entries: Array[TaloLeaderboardEntry] = res.entries
+		var count: int = res.count
+		var is_last_page: bool = res.is_last_page
+		if is_last_page:
+			done = true
+		else:
+			page += 1
+	
+	_build_entries()
+
+# Muestra el ranking
 func show_ranking():
 	message.visible = false
 	score_container.visible = false
-	
-	for child in ranking_container.get_children():
-		child.queue_free()
-	
-	# Crear un label por cada item en ranking
-	for i in range(ranking.size()):
-		var entry = ranking[i]
-		var player_label = Label.new()
-		player_label.text = str(i+1)+". " + entry.name +" - " + str(entry.score)
-		player_label.label_settings = ranking_label_settings
-		ranking_container.add_child(player_label)
 	
 	var label = play_again_btn.get_node("Label")
 	label.text = menu_labels["play_again"] 
@@ -133,3 +144,32 @@ func _on_btn_play_again_pressed() -> void:
 	queue_free()
 	AudioManager.play_click_sfx()
 	GameController.reset_game()
+	
+func _build_entries() -> void:
+	free_container_children()
+	
+	# Get cached entries, recently stored
+	var cached_entry = Talo.leaderboards.get_cached_entries(leaderboard_internal_name)
+	for entry in cached_entry:
+		_create_entry(entry)
+	
+func _create_entry(entry: TaloLeaderboardEntry) -> void:
+	# Crear un label por cada item en ranking
+	var player_label = Label.new()
+	player_label.text = str(entry.position)+". " + entry.player_alias.identifier +" - " + str(int(entry.score))
+	player_label.label_settings = ranking_label_settings
+	ranking_container.add_child(player_label)
+	
+# helpers
+func free_container_children():
+	for child in ranking_container.get_children():
+		child.queue_free() 
+
+# OLD FUNCTIONS
+# Replaced by Talo
+func store_in_ranking(username: String, score_value: int):
+	ranking.append({"name": username, "score": score_value})
+	# Ordenar de mayor a menor score
+	ranking.sort_custom(func(a, b): return b.score - a.score)
+	if ranking.size() > 10:
+		ranking = ranking.slice(0, 10)
