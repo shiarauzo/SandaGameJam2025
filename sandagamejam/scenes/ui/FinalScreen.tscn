@@ -307,10 +307,10 @@ texture = ExtResource("2_7raak")
 
 [node name="Message" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = 372.0
-offset_top = -10.0
-offset_right = 741.0
-offset_bottom = 178.0
+offset_left = 248.0
+offset_top = -300.0
+offset_right = 617.0
+offset_bottom = -112.0
 rotation = 0.0698132
 scale = Vector2(1.2, 1.2)
 texture = ExtResource("3_7raak")
@@ -329,20 +329,20 @@ vertical_alignment = 1
 [node name="Recipe" type="TextureRect" parent="."]
 modulate = Color(1, 1, 1, 0.341176)
 layout_mode = 0
-offset_left = 694.0
-offset_top = 400.0
-offset_right = 1136.0
-offset_bottom = 781.0
+offset_left = -400.0
+offset_top = 466.0
+offset_right = 42.0
+offset_bottom = 847.0
 rotation = -0.188496
 scale = Vector2(0.6, 0.6)
 texture = ExtResource("4_gh2yv")
 
 [node name="Newton" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = -208.0
-offset_top = 161.0
-offset_right = 3761.0
-offset_bottom = 3947.0
+offset_left = -500.0
+offset_top = 217.0
+offset_right = 3469.0
+offset_bottom = 4003.0
 rotation = -0.0942478
 scale = Vector2(0.135, 0.135)
 texture = ExtResource("6_nsh0p")
@@ -361,10 +361,10 @@ libraries = {
 
 [node name="ScoreContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 460.0
-offset_top = 294.0
-offset_right = 785.0
-offset_bottom = 445.0
+offset_left = 384.0
+offset_top = 900.0
+offset_right = 709.0
+offset_bottom = 1051.0
 theme_override_constants/separation = 16
 alignment = 1
 

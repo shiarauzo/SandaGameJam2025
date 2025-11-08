@@ -21,10 +21,15 @@ GlobalManager="*res://scripts/managers/global_manager.gd"
 UILayerManager="*res://scripts/ui/UILayerManager.gd"
 AudioManager="*res://scenes/AudioManager.tscn"
 GameController="*res://scenes/controllers/GameController.tscn"
+Talo="*res://addons/talo/talo_manager.gd"
 
 [display]
 
 window/stretch/mode="canvas_items"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/talo/plugin.cfg")
 
 [rendering]
 
