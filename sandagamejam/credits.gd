@@ -3,7 +3,9 @@ extends Control
 @onready var credits_theme: Theme = preload("res://custom_resources/Credits.tres")
 @onready var scroll: ScrollContainer = ScrollContainer.new()
 @onready var grid: GridContainer = GridContainer.new()
+@onready var close_button: TextureButton = $UI/close_button  
 
+	
 func _ready():
 	self.theme = credits_theme
 	
@@ -38,7 +40,13 @@ func _ready():
 	_add_credit("Melissa Huerta", "Game Developer & Tech Designer")
 	_add_credit("Shiara Arauzo", "Game Developer")
 	_add_credit("Malu Munayco", "Game Developer")
-	$close_button.pressed.connect(_on_close_button_pressed)
+	var btn = $close_button
+	print("close_button encontrado? ", btn)
+	if btn:
+		btn.pressed.connect(_on_close_button_pressed)
+	else:
+		push_error("No encontré el nodo close_button")
+
 
 
 
@@ -53,6 +61,12 @@ func _add_credit(member: String, role: String):
 	
 	grid.add_child(name_label)
 	grid.add_child(role_label)
-
+	
 func _on_close_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/menus/MainMenu.tscn")
+	print("⚡ Botón presionado, intentando volver al menú")
+	var path = "res://scenes/menus/MainMenu.tscn"
+	if ResourceLoader.exists(path):
+		var scene = load(path)
+		get_tree().change_scene_to_packed(scene)
+	else:
+		push_error("No se encontró la escena en: " + path)

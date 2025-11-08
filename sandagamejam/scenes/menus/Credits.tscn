@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://ecskbidj06cr"]
+[gd_scene load_steps=6 format=3 uid="uid://ecskbidj06cr"]
 
 [ext_resource type="Script" uid="uid://c2yno5nwb6hlr" path="res://credits.gd" id="1_g4wvt"]
 [ext_resource type="Texture2D" uid="uid://dd5cjrr17fxps" path="res://assets/UI/back.png" id="2_c1t8d"]
 [ext_resource type="Texture2D" uid="uid://4gn8d3o5xhsq" path="res://assets/backgrounds/credits_bg.png" id="2_d2vv3"]
 [ext_resource type="Theme" uid="uid://b43q23bmf727" path="res://custom_resources/Credits.tres" id="3_5jxb4"]
+[ext_resource type="Texture2D" uid="uid://bf1axal7v1ila" path="res://assets/UI/playbtn.png" id="5_k7ai5"]
 
 [node name="Credits" type="Control"]
 layout_mode = 3
@@ -31,19 +32,6 @@ theme = ExtResource("3_5jxb4")
 text = "Créditos"
 horizontal_alignment = 1
 
-[node name="close_button" type="TextureButton" parent="."]
-layout_mode = 0
-offset_left = 286.0
-offset_top = 521.0
-offset_right = 335.0
-offset_bottom = 571.0
-texture_normal = ExtResource("2_c1t8d")
-
-[node name="close" type="Label" parent="close_button"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 0
 offset_right = 40.0
@@ -51,5 +39,14 @@ offset_bottom = 40.0
 
 [node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
 layout_mode = 2
+
+[node name="close_button" type="TextureButton" parent="."]
+layout_mode = 2
+offset_left = 298.0
+offset_top = 510.0
+offset_right = 347.0
+offset_bottom = 559.0
+texture_normal = ExtResource("2_c1t8d")
+texture_hover = ExtResource("5_k7ai5")
 
 [connection signal="pressed" from="close_button" to="." method="_on_close_button_pressed"]

@@ -38,3 +38,19 @@ offset_right = 599.0
 offset_bottom = 563.0
 scale = Vector2(1.2, 1.2)
 texture_normal = ExtResource("5_uh46f")
+
+[node name="Retroceder_Button" type="TextureButton" parent="."]
+visible = false
+offset_left = 73.0
+offset_top = 522.0
+offset_right = 112.0
+offset_bottom = 561.0
+scale = Vector2(1.2, 1.2)
+texture_normal = ExtResource("5_uh46f")
+
+[node name="Omit_button" type="Label" parent="."]
+offset_left = 1052.0
+offset_top = 46.0
+offset_right = 1092.0
+offset_bottom = 69.0
+text = "Omit"
