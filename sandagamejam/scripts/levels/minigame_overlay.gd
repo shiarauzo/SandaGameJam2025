@@ -96,7 +96,7 @@ func show_ingredients_textrect() -> Node:
 	var scene = preload("res://scenes/minigames/IngredientsMenu.tscn")
 	var instance = scene.instantiate()
 	
-	var root = get_parent() # MinigameOverlay está instanciado dentro de PastryLevel
+	var root = get_parent()
 	if root:
 		root.add_child(instance)
 		instance.position = Vector2(100,45)
