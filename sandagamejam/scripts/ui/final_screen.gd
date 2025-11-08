@@ -21,7 +21,7 @@ extends Control
 @export var max_dots: int = 3
 
 var current_dots: int = 0
-var base_text: String = "Loading" # TO DO REPLACE BY LANGUAGE
+var base_text: String = GlobalManager.loading_label
 var timer: Timer
 
 # Preloads de texturas
@@ -74,6 +74,7 @@ func _input(event: InputEvent) -> void:
 			hide_player_score_labels()
 			animate_loading_label()
 			await store_in_talo("".join(current_name), score)
+			stop_loading_animation()
 			show_ranking()
 			name_entered = true
 	
@@ -119,18 +120,25 @@ func show_name_label():
 	
 # Animar el "Loading..."
 func animate_loading_label():
-	loading_label.visible = true # TO DO ANIMATE LOADING LABEL
-	timer = Timer.new()
-	add_child(timer)
-	timer.wait_time = dot_speed
-	timer.autostart = true
-	timer.timeout.connect(update_dots)
-	update_dots()
+	loading_label.visible = true
+	loading_label.text = base_text
+	if timer == null:
+		timer = Timer.new()
+		add_child(timer)
+		timer.wait_time = dot_speed
+		timer.timeout.connect(update_dots)
+	timer.start()
 
 func update_dots():
 	current_dots = (current_dots + 1) % (max_dots + 1)
 	loading_label.text = base_text + ".".repeat(current_dots)
-	
+
+func stop_loading_animation():
+	if timer and not timer.is_stopped():
+		timer.stop()
+	loading_label.visible = false
+	current_dots = 0
+
 # Talo Calls
 func store_in_talo(username: String, score_value: int) -> void:
 	await Talo.players.identify("username", username)
