@@ -1,21 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://cr5ibwnsui3o0"]
+[gd_scene load_steps=4 format=3 uid="uid://cr5ibwnsui3o0"]
 
+[ext_resource type="Script" uid="uid://b65hrsrlvb3yn" path="res://scenes/controllers/bowl.gd" id="1_7gpes"]
 [ext_resource type="Texture2D" uid="uid://k1lme1i021d3" path="res://assets/UI/bowl_fondo.png" id="1_gsi2g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7gpes"]
 size = Vector2(199, 86)
 
-[node name="Bowl" type="Node2D"]
+[node name="Bowl" type="Area2D"]
+script = ExtResource("1_7gpes")
 
-[node name="Bowl" type="Area2D" parent="."]
-collision_layer = 4
-collision_mask = 2
-
-[node name="Sprite2D" type="Sprite2D" parent="Bowl"]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(986, 537)
 scale = Vector2(0.201916, 0.169378)
 texture = ExtResource("1_gsi2g")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Bowl"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(985.5, 537)
 shape = SubResource("RectangleShape2D_7gpes")

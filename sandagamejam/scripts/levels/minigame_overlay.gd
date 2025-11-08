@@ -1,3 +1,4 @@
+# MinigameOverlay.tscn maneja la UI/flujo del minijuego.
 extends Node2D
 
 signal ingredients_minigame_started
@@ -10,10 +11,12 @@ signal ingredients_minigame_timeout
 
 var minigame_started := false
 var active_tweens := []
+var bowl: Area2D = null  # ← AGREGAR ESTA LÍNEA
 
 func _ready():
 	load_menu_data()
 	load_btn_labels()
+	setup_bowl()
 
 func hide_menu_container():
 	menu_container.visible = false
@@ -88,13 +91,12 @@ func load_ingredients_assets():
 	var recipe_selected = GlobalManager.current_level_recipes[GlobalManager.selected_recipe_idx]
 	var ingredients = recipe_selected["ingredients"]
 
-	# Contenedor donde irán los ingredientes
 	var ing_container = recipe_container.get_node("IngredientsContainer")
 	clear_children(ing_container)
 
 	for i in range(ingredients.size()):
 		var ing_id = ingredients[i]
-		var wrapper = create_ingredient_wrapper(ing_id)
+		var wrapper = create_ingredient_wrapper(ing_id, false)  # false = no clickable
 		ing_container.add_child(wrapper)
 
 func start_ingredient_minigame():
@@ -115,37 +117,70 @@ func animate_ingredients(ingr_loop: Array) -> void:
 	var container := recollect_container
 	clear_children_except_bowl(container)
 
-
 	var start_y := -200  
 	var end_y := recollect_container.size.y + 100 
 	var x_positions := [150, 250, 350, 450, 550] 
 	var duration := 4.0
-	var spawn_interval := 1.1  
+	var spawn_interval := 1.1
 
 	for i in range(ingr_loop.size()):
 		var ing_id = ingr_loop[i]
-		var wrapper = create_ingredient_wrapper(ing_id, true)
-		container.add_child(wrapper)
+		var ingredient = create_ingredient_area2d(ing_id)  # ← CAMBIO: usar Area2D
+		container.add_child(ingredient)
 
-	
 		var x_pos = x_positions[i % x_positions.size()]
-		wrapper.position = Vector2(x_pos, start_y)
+		ingredient.position = Vector2(x_pos, start_y)
 
 		var tween := create_tween()
-		
-		tween.tween_property(wrapper, "position:y", end_y, duration)\
+		tween.tween_property(ingredient, "position:y", end_y, duration)\
 			.set_trans(Tween.TRANS_LINEAR) \
 			.set_ease(Tween.EASE_IN) \
 			.set_delay(spawn_interval * i)
-		tween.tween_callback(Callable(wrapper, "queue_free"))
+		tween.tween_callback(Callable(ingredient, "queue_free"))
 		
-	
 		active_tweens.append(tween)
 	
 		if i == ingr_loop.size() - 1:
 			tween.finished.connect(func():
 				emit_signal("ingredients_minigame_timeout")
 			)
+
+# ========================================
+# NUEVA FUNCIÓN: Crear ingrediente como Area2D
+# ========================================
+func create_ingredient_area2d(ingredient_id: String) -> Area2D:
+	var path = "res://assets/pastry/ingredients/%s.png" % ingredient_id
+	if not ResourceLoader.exists(path):
+		print("⚠️ No existe asset:", path)
+		return null
+
+	var tex = load(path)
+	
+	# Crear Area2D
+	var ingredient = Area2D.new()
+	ingredient.name = "Ingredient_" + ingredient_id
+	
+	# Sprite
+	var sprite = Sprite2D.new()
+	sprite.texture = tex
+	sprite.scale = Vector2(0.35, 0.35)
+	ingredient.add_child(sprite)
+	
+	# Colisión
+	var collision = CollisionShape2D.new()
+	var shape = RectangleShape2D.new()
+	shape.size = tex.get_size() * 0.35
+	collision.shape = shape
+	ingredient.add_child(collision)
+	
+	# Configurar layers
+	ingredient.collision_layer = 2  # Layer 2: ingredientes
+	ingredient.collision_mask = 4   # Mask 4: detecta bowl (layer 3)
+	
+	# Guardar tipo
+	ingredient.set_meta("food_type", ingredient_id)
+	
+	return ingredient
 
 func clear_children(node: Node) -> void:
 	for child in node.get_children():
@@ -156,16 +191,17 @@ func clear_children_except_bowl(container: Node) -> void:
 		if child.name != "Bowl":
 			child.queue_free()
 
+# Esta función es para mostrar ingredientes en la receta (Control)
 func create_ingredient_wrapper(ingredient_id: String, is_clickable: bool = false):
 	var path = "res://assets/pastry/ingredients/%s.png" % ingredient_id
 	if not ResourceLoader.exists(path):
 		print("⚠️ No existe asset:", path)
+		return null
 
 	var tex = load(path)
-		
-
+	
 	var wrapper = Control.new()
-	wrapper.custom_minimum_size = tex.get_size() * 0.35 if is_clickable else tex.get_size() * 0.25
+	wrapper.custom_minimum_size = tex.get_size() * 0.25
 	wrapper.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	wrapper.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
@@ -177,32 +213,22 @@ func create_ingredient_wrapper(ingredient_id: String, is_clickable: bool = false
 	sprite.anchor_bottom = 1
 	sprite.size_flags_horizontal = Control.SIZE_FILL
 	sprite.size_flags_vertical = Control.SIZE_FILL
-	
-	if is_clickable:
-		sprite.mouse_filter = Control.MOUSE_FILTER_STOP
-		sprite.connect("gui_input", Callable(self, "_on_ingredient_clicked").bind(wrapper, ingredient_id))
 
 	wrapper.add_child(sprite)
 	return wrapper
 
-# Helpers
 func generate_arr(base: Array, base_len: int) -> Array:
 	var result = base.duplicate()
-
-
 	add_random_ingredients(result, GlobalManager.fake_ingredients)
-
-
+	
 	if GlobalManager.lives < GlobalManager.max_lives:
 		add_random_ingredients(result, GlobalManager.gravitational_ingredients)
 	
-
 	while result.size() < base_len:
 		var rand = base[randi() % base.size()]
 		result.append(rand)
 	
 	shuffle_array(result)
-
 	return result
 
 func shuffle_array(arr: Array) -> void:
@@ -252,63 +278,55 @@ func _on_btn_prepare_recipe_pressed() -> void:
 	GlobalManager.recipe_started = true
 	
 	if minigame_started:
-
 		for t in active_tweens:
 			if is_instance_valid(t):
 				t.kill()
 		active_tweens.clear()
 		
-
-		clear_children(recollect_container)
+		clear_children_except_bowl(recollect_container)
 		
 		minigame_started = false
 		btn_prepare.visible = false
 		GameController.make_newton_cook()
 
-func _on_ingredient_clicked(event: InputEvent, wrapper: Control, ing_id: String):
-	if event is InputEventMouseButton and event.pressed:
-		AudioManager.play_collect_ingredient_sfx()
-		
+# ========================================
+# SETUP DEL BOWL
+# ========================================
+func setup_bowl():
+	# CAMBIAR LA RUTA según donde guardaste Bowl.tscn
+	var bowl_path = "res://scenes/controllers/Bowl.tscn"
+	
+	# Verificar que existe
+	if not ResourceLoader.exists(bowl_path):
+		push_error("❌ No se encuentra Bowl.tscn en: " + bowl_path)
+		return
+	
+	var bowl_scene = load(bowl_path)
+	bowl = bowl_scene.instantiate()
+	
+	# IMPORTANTE: Agregar a la escena ANTES de configurar propiedades
+	recollect_container.add_child(bowl)
+	
+	# Esperar un frame para que el _ready() del bowl se ejecute
+	await get_tree().process_frame
+	
+	# Ahora configurar posición y límites
+	bowl.fixed_y = recollect_container.size.y - 100
+	bowl.min_x = 100
+	bowl.max_x = recollect_container.size.x - 100
+	bowl.position.y = bowl.fixed_y  # Posicionar manualmente también
+	
+	# Conectar señal de captura
+	if not bowl.is_connected("ingredient_captured", Callable(self, "_on_ingredient_captured")):
+		bowl.connect("ingredient_captured", Callable(self, "_on_ingredient_captured"))
+	
+	print("✅ Bowl configurado correctamente en Y:", bowl.position.y)
 
-		var target_pos = Vector2(
-			recollect_container.size.x / 2, 
-			recollect_container.size.y - 50
-		)
-		
-
-		var tween = create_tween()
-		
-		tween.tween_property(wrapper, "global_position", target_pos, 0.5)\
-			.set_trans(Tween.TRANS_CUBIC)\
-			.set_ease(Tween.EASE_IN)
-			
-		tween.tween_callback(Callable(wrapper, "queue_free"))
-
-		GlobalManager.collected_ingredients.append(ing_id)
-		
-		if GlobalManager.collected_ingredients.size() >= 2 and is_instance_valid(btn_prepare):
-			btn_prepare.visible = true
-			btn_prepare.disabled = false
-
-func random_point_in_polygon(poly: PackedVector2Array) -> Vector2:
-	var min_x = poly[0].x
-	var max_x = poly[0].x
-	var min_y = poly[0].y
-	var max_y = poly[0].y
-
-	for v in poly:
-		min_x = min(min_x, v.x)
-		max_x = max(max_x, v.x)
-		min_y = min(min_y, v.y)
-		max_y = max(max_y, v.y)
-
-	var point = Vector2()
-	var attempts = 0
-	while attempts < 1000:
-		point.x = randf_range(min_x, max_x)
-		point.y = randf_range(min_y, max_y)
-		if Geometry2D.is_point_in_polygon(point, poly):
-			return point
-		attempts += 1
-		
-	return poly[0]
+func _on_ingredient_captured(ingredient_id: String):
+	print("🥣 Bowl capturó:", ingredient_id)
+	GlobalManager.collected_ingredients.append(ingredient_id)
+	AudioManager.play_collect_ingredient_sfx()
+	
+	if GlobalManager.collected_ingredients.size() >= 2:
+		btn_prepare.visible = true
+		btn_prepare.disabled = false

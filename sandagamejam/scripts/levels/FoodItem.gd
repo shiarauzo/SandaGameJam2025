@@ -13,5 +13,4 @@ func _ready():
 func _on_input_event(_viewport, event: InputEvent, _shape_idx: int):
 	if event is InputEventMouseButton and event.pressed:
 		print("Seleccionaste ingrediente:", food_type)
-		# Aquí validas con receta o cliente
 		GlobalManager.check_food(food_type)

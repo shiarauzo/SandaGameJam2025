@@ -47,9 +47,6 @@ func _ready():
 	else:
 		push_error("No encontré el nodo close_button")
 
-
-
-
 func _add_credit(member: String, role: String):
 	var name_label = Label.new()
 	name_label.text = member
