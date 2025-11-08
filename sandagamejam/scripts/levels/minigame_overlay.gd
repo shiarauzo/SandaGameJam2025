@@ -38,27 +38,28 @@ func show_recollect_container():
 func fill_ingredients_textrect(instance: Node) -> void:
 	if not instance:
 		return
-	
+
 	var center = instance.get_node("TextureRect/CenterContainer")
 	if not center:
 		print("No se encontró el CenterContainer en IngredientsMenu")
 		return
 
-	# Limpiar hijos anteriores
 	for child in center.get_children():
 		child.queue_free()
 
 	var recipe = GlobalManager.current_level_recipes[GlobalManager.selected_recipe_idx]
 	var ingredients = recipe["ingredients"]
 
-	# Crear GridContainer con 2 columnas
 	var grid = GridContainer.new()
 	grid.columns = 2
 	grid.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	grid.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	center.add_child(grid)
 
-	for ing_id in ingredients:
+	var column_gap = 25 
+
+	for i in range(ingredients.size()):
+		var ing_id = ingredients[i]
 		var tex_path = "res://assets/pastry/ingredients/%s.png" % ing_id
 		if not ResourceLoader.exists(tex_path):
 			print("No existe asset:", tex_path)
@@ -69,24 +70,27 @@ func fill_ingredients_textrect(instance: Node) -> void:
 		tex_rect.texture = tex
 		tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		tex_rect.expand = true
-		tex_rect.custom_minimum_size = Vector2(50, 50)
+		tex_rect.custom_minimum_size = Vector2(40, 40)
 
 		var label = Label.new()
 		label.text = "x 1"
-		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 
-		# HBox para poner imagen y texto al costado
 		var hbox = HBoxContainer.new()
 		hbox.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		hbox.add_child(tex_rect)
 
 		var spacer = Control.new()
-		spacer.custom_minimum_size = Vector2(5, 0)
+		spacer.custom_minimum_size = Vector2(4, 0)
 		hbox.add_child(spacer)
 
 		hbox.add_child(label)
 
-		grid.add_child(hbox)
+		var wrapper = MarginContainer.new()
+		wrapper.add_child(hbox)
+		if i % 2 == 0:
+			wrapper.add_theme_constant_override("margin_right", column_gap)
+
+		grid.add_child(wrapper)
 
 func show_ingredients_textrect() -> Node:
 	var scene = preload("res://scenes/minigames/IngredientsMenu.tscn")
