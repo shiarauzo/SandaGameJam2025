@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://ebvprw6pexo2"]
+[gd_scene load_steps=7 format=3 uid="uid://ebvprw6pexo2"]
 
 [ext_resource type="Script" uid="uid://cd2svseh483m6" path="res://scenes/menus/intro.gd" id="1_1a7bk"]
 [ext_resource type="Texture2D" uid="uid://b1iq186864mhs" path="res://assets/UI/intro_background.png" id="2_56pe6"]
 [ext_resource type="Texture2D" uid="uid://dt810x6h5xdnr" path="res://assets/UI/intro_text.png" id="3_klb7a"]
 [ext_resource type="LabelSettings" uid="uid://b2h5bls5s7rsg" path="res://custom_resources/MainMenuButtonLabels.tres" id="5_56pe6"]
 [ext_resource type="Texture2D" uid="uid://bf1axal7v1ila" path="res://assets/UI/playbtn.png" id="5_uh46f"]
+[ext_resource type="Texture2D" uid="uid://dd5cjrr17fxps" path="res://assets/UI/back.png" id="6_56pe6"]
 
 [node name="Intro" type="Node2D"]
 script = ExtResource("1_1a7bk")
@@ -41,12 +42,11 @@ texture_normal = ExtResource("5_uh46f")
 
 [node name="Retroceder_Button" type="TextureButton" parent="."]
 visible = false
-offset_left = 73.0
-offset_top = 522.0
-offset_right = 112.0
-offset_bottom = 561.0
-scale = Vector2(1.2, 1.2)
-texture_normal = ExtResource("5_uh46f")
+offset_left = 72.0
+offset_top = 520.0
+offset_right = 121.0
+offset_bottom = 569.0
+texture_normal = ExtResource("6_56pe6")
 
 [node name="Omit_button" type="Label" parent="."]
 offset_left = 1052.0
