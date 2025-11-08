@@ -1,4 +1,3 @@
-# MinigameOverlay.tscn maneja la UI/flujo del minijuego.
 extends Node2D
 
 signal ingredients_minigame_started
@@ -77,7 +76,6 @@ func load_selected_recipe_data(idx: int) -> void:
 	var lang = GlobalManager.game_language
 	var recipe_selected = GlobalManager.current_level_recipes[idx]
 	var rec_name = recipe_selected["name"][lang]
-	#var benefits = recipe_selected["benefits"][lang] 
 	var riddle = recipe_selected["riddle"][lang]
 	var text = "[center][font_size=35]" + rec_name + "[/font_size][/center]\n\n"
 	text += "[font_size=36] " + riddle + "[/font_size]"
@@ -90,7 +88,6 @@ func load_ingredients_assets():
 	var recipe_selected = GlobalManager.current_level_recipes[GlobalManager.selected_recipe_idx]
 	var ingredients = recipe_selected["ingredients"]
 
-	# Contenedor donde irán los ingredientes
 	var ing_container = recipe_container.get_node("IngredientsContainer")
 	clear_children(ing_container)
 
@@ -99,7 +96,7 @@ func load_ingredients_assets():
 		var wrapper = create_ingredient_wrapper(ing_id)
 		ing_container.add_child(wrapper)
 
-# Minijuego de PastryLevel1
+
 func start_ingredient_minigame():
 	print("START MINIGAME... ")
 	emit_signal("ingredients_minigame_started")
@@ -118,35 +115,36 @@ func animate_ingredients(ingr_loop: Array) -> void:
 	var container := recollect_container
 	clear_children_except_bowl(container)
 
-	var start_x := recollect_container.position.x + recollect_container.size.x + 100
-	var end_x := recollect_container.position.x
-	var spacing := 170
+
+	var start_y := -200 
+	var end_y := recollect_container.size.y + 100  
+	var x_positions := [150, 250, 350, 450, 550] 
 	var duration := 4.0
-	var y := 100
-	var spawn_interval := 1.1  # tiempo entre aparición de cada ingrediente
+	var spawn_interval := 1.1 
 
 	for i in range(ingr_loop.size()):
 		var ing_id = ingr_loop[i]
 		var wrapper = create_ingredient_wrapper(ing_id, true)
 		container.add_child(wrapper)
 
-		wrapper.position = Vector2(start_x + (i * spacing), y)
+
+		var x_pos = x_positions[i % x_positions.size()]
+		wrapper.position = Vector2(x_pos, start_y)
 
 		var tween := create_tween()
-		tween.tween_property(wrapper, "position:x", end_x, duration + spawn_interval * i)\
+		tween.tween_property(wrapper, "position:y", end_y, duration + spawn_interval * i)\
 			.set_trans(Tween.TRANS_LINEAR) \
-			.set_ease(Tween.EASE_IN_OUT) \
+			.set_ease(Tween.EASE_IN) \
 			.set_delay(spawn_interval * i)
 		tween.tween_callback(Callable(wrapper, "queue_free"))
-		# Guardar tween para poder cancelarlo
+		
+		
 		active_tweens.append(tween)
 	
-		# Cuando el último tween termina, verificar si se presionó "Prepare"
 		if i == ingr_loop.size() - 1:
 			tween.finished.connect(func():
 				emit_signal("ingredients_minigame_timeout")
 			)
-
 
 func clear_children(node: Node) -> void:
 	for child in node.get_children():
@@ -164,7 +162,6 @@ func create_ingredient_wrapper(ingredient_id: String, is_clickable: bool = false
 
 	var tex = load(path)
 		
-	# Wrapper (para escalarlo)
 	var wrapper = Control.new()
 	wrapper.custom_minimum_size = tex.get_size() * 0.35 if is_clickable else tex.get_size() * 0.25
 	wrapper.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -186,20 +183,18 @@ func create_ingredient_wrapper(ingredient_id: String, is_clickable: bool = false
 	wrapper.add_child(sprite)
 	return wrapper
 
-# Helpers
-# Generar un array con ingredientes variados que contengan por lo menos una vez cada ingrediente real
-# y 0 o más ingredientes falsos
+
 func generate_arr(base: Array, base_len: int) -> Array:
 	var result = base.duplicate()
 
-	# Agregar ingredientes falsos (0 o más)
+
 	add_random_ingredients(result, GlobalManager.fake_ingredients)
 
-	# Agregar 0 o 1 ingrediente gravitational solo si no se ha llegado al tope de vidas
+
 	if GlobalManager.lives < GlobalManager.max_lives:
 		add_random_ingredients(result, GlobalManager.gravitational_ingredients)
 	
-	# Completar hasta base_len con ingredientes aleatorios de los reales
+
 	while result.size() < base_len:
 		var rand = base[randi() % base.size()]
 		result.append(rand)
@@ -209,7 +204,6 @@ func generate_arr(base: Array, base_len: int) -> Array:
 	return result
 
 func shuffle_array(arr: Array) -> void:
-	# starts at arr.size() -1, ends in 0
 	for i in range(arr.size() - 1, 0, -1):
 		var j = randi() % (i + 1)
 		var temp = arr[i]
@@ -217,11 +211,10 @@ func shuffle_array(arr: Array) -> void:
 		arr[j] = temp
 
 func add_random_ingredients(result: Array, source_array: Array) -> void:
-	var count = 2 #TODO: incrementar segun cada nivel, randi() % (max_count + 1)
+	var count = 2
 	for i in range(count):
 		var ing = source_array[randi() % source_array.size()]
 		result.append(ing.id)
-
 
 # Botones
 func _on_recipe_1_pressed() -> void:
@@ -257,13 +250,13 @@ func _on_btn_prepare_recipe_pressed() -> void:
 	GlobalManager.recipe_started = true
 	
 	if minigame_started:
-		 # Cancelar todos los tweens activos
+
 		for t in active_tweens:
 			if is_instance_valid(t):
 				t.kill()
 		active_tweens.clear()
 		
-		# Limpiar ingredientes que aún no se recogieron
+		
 		clear_children(recollect_container)
 		
 		minigame_started = false
@@ -274,26 +267,27 @@ func _on_ingredient_clicked(event: InputEvent, wrapper: Control, ing_id: String)
 	if event is InputEventMouseButton and event.pressed:
 		AudioManager.play_collect_ingredient_sfx()
 		
-		# Posición aleatoria dentro del polígono
-		var target_pos = Vector2(1000, recollect_container.position.y + recollect_container.size.y - 50)
 		
-		# Tween para mover el ingrediente
+		var target_pos = Vector2(
+			recollect_container.size.x / 2, 
+			recollect_container.size.y - 50
+		)
+		
+
 		var tween = create_tween()
 		
 		tween.tween_property(wrapper, "global_position", target_pos, 0.5)\
-			.set_trans(Tween.TRANS_LINEAR)\
+			.set_trans(Tween.TRANS_CUBIC)\
 			.set_ease(Tween.EASE_IN)
 			
 		tween.tween_callback(Callable(wrapper, "queue_free"))
 
 		GlobalManager.collected_ingredients.append(ing_id)
 		
-		#print("🍎 Ingredient recolectado:", ing_id)
 		if GlobalManager.collected_ingredients.size() >= 2 and is_instance_valid(btn_prepare):
 			btn_prepare.visible = true
 			btn_prepare.disabled = false
 
-# Función simple: generar un punto aleatorio dentro del bounding box y chequear si está dentro del polígono
 func random_point_in_polygon(poly: PackedVector2Array) -> Vector2:
 	var min_x = poly[0].x
 	var max_x = poly[0].x
@@ -308,12 +302,11 @@ func random_point_in_polygon(poly: PackedVector2Array) -> Vector2:
 
 	var point = Vector2()
 	var attempts = 0
-	while attempts < 1000:  # evitar loop infinito
+	while attempts < 1000:
 		point.x = randf_range(min_x, max_x)
 		point.y = randf_range(min_y, max_y)
 		if Geometry2D.is_point_in_polygon(point, poly):
 			return point
 		attempts += 1
 		
-	# fallback por si no encuentra un punto después de muchos intentos
-	return poly[0]  # retorna el primer vértice del polígono
+	return poly[0]
