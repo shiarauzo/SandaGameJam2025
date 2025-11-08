@@ -156,7 +156,7 @@ func load_entries_from_talo() -> void:
 		var res := await Talo.leaderboards.get_entries(leaderboard_internal_name, options)
 
 		# show entries!
-		var entries: Array[TaloLeaderboardEntry] = res.entries
+		# var entries: Array[TaloLeaderboardEntry] = res.entries
 		
 		#var count: int = res.count
 		var is_last_page: bool = res.is_last_page
@@ -168,12 +168,12 @@ func load_entries_from_talo() -> void:
 	_build_entries()
 
 # Evaluar si el score entra al ranking
-func is_player_in_ranking(score: int) -> bool:
+func is_player_in_ranking(score_value: int) -> bool:
 	await load_entries_from_talo()
 	var last_child_idx = cached_entries.size()
 	var lower_score =  cached_entries[last_child_idx-1].score
 	
-	return score > lower_score
+	return score_value > lower_score
 	
 # Muestra el ranking
 func show_ranking():
