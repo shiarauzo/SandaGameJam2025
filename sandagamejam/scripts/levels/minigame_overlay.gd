@@ -16,6 +16,11 @@ var active_tweens := []
 func _ready():
 	load_menu_data()
 	load_btn_labels()
+	btn_prepare.anchor_top = 0.0
+	btn_prepare.anchor_bottom = 0.0
+	btn_prepare.anchor_left = 0.5
+	btn_prepare.anchor_right = 0.5
+	btn_prepare.position = Vector2(0, 40) 
 	print("🎮 MinigameOverlay listo.")
 
 
@@ -53,7 +58,7 @@ func load_menu_data() -> void:
 		var recipe_id = recipe_data["id"]
 		var path = "res://assets/pastry/recipes/%s.png" % recipe_id
 		if not ResourceLoader.exists(path):
-			print("⚠️ No existe asset:", path)
+			print("No existe asset:", path)
 			continue
 		
 		var tex = load(path)
@@ -110,7 +115,7 @@ func start_ingredient_minigame():
 	btn_prepare.visible = true
 
 func animate_ingredients(ingr_loop: Array) -> void:
-	print("🍓 EMPEZAR A RECOLECTAR INGREDIENTES!!! ", ingr_loop)
+	print("EMPEZAR A RECOLECTAR INGREDIENTES!!! ", ingr_loop)
 	clear_children_except_bowl(texture_rect)
 
 	var start_y := -200  
@@ -144,7 +149,7 @@ func animate_ingredients(ingr_loop: Array) -> void:
 func create_ingredient_area2d(ingredient_id: String) -> Area2D:
 	var path = "res://assets/pastry/ingredients/%s.png" % ingredient_id
 	if not ResourceLoader.exists(path):
-		print("⚠️ No existe asset:", path)
+		print("⚠No existe asset:", path)
 		return null
 
 	var tex = load(path)
@@ -223,7 +228,7 @@ func _on_btn_prepare_recipe_pressed() -> void:
 		GameController.make_newton_cook()
 
 func _on_ingredient_captured(ingredient_id: String):
-	print("🥣 Bowl capturó:", ingredient_id)
+	print("Bowl capturó:", ingredient_id)
 	GlobalManager.collected_ingredients.append(ingredient_id)
 	AudioManager.play_collect_ingredient_sfx()
 	
@@ -235,7 +240,7 @@ func _on_ingredient_captured(ingredient_id: String):
 func create_ingredient_wrapper(ingredient_id: String, is_clickable: bool = false):
 	var path = "res://assets/pastry/ingredients/%s.png" % ingredient_id
 	if not ResourceLoader.exists(path):
-		print("⚠️ No existe asset:", path)
+		print("No existe asset:", path)
 		return null
 
 	var tex = load(path)
