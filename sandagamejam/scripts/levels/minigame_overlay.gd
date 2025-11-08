@@ -1,22 +1,23 @@
-# MinigameOverlay.tscn maneja la UI/flujo del minijuego.
+
 extends Node2D
 
 signal ingredients_minigame_started
 signal ingredients_minigame_timeout
 
-@onready var menu_container : Control = $TextureRect/MenuContainer
-@onready var recipe_container : Control = $TextureRect/RecipeContainer
-@onready var recollect_container : Control = $TextureRect/RecollectContainer
-@onready var btn_prepare : TextureButton = $TextureRect/BtnPrepareRecipe
+@onready var texture_rect: TextureRect = $TextureRect
+@onready var menu_container: Control = $TextureRect/MenuContainer
+@onready var recipe_container: Control = $TextureRect/RecipeContainer
+@onready var btn_prepare: TextureButton = $TextureRect/BtnPrepareRecipe
+@onready var bowl: Area2D = $TextureRect/Bowl
 
 var minigame_started := false
 var active_tweens := []
-var bowl: Area2D = null  # ← AGREGAR ESTA LÍNEA
 
 func _ready():
 	load_menu_data()
 	load_btn_labels()
-	setup_bowl()
+	print("🎮 MinigameOverlay listo.")
+
 
 func hide_menu_container():
 	menu_container.visible = false
@@ -31,11 +32,6 @@ func hide_recipe_container():
 func show_recipe_container():
 	recipe_container.visible = true
 
-func hide_recollect_container():
-	recollect_container.visible = false
-
-func show_recollect_container():
-	recollect_container.visible = true
 
 func show_selected_recipe(idx: int) -> void:
 	GlobalManager.selected_recipe_idx = idx
@@ -96,11 +92,12 @@ func load_ingredients_assets():
 
 	for i in range(ingredients.size()):
 		var ing_id = ingredients[i]
-		var wrapper = create_ingredient_wrapper(ing_id, false)  # false = no clickable
+		var wrapper = create_ingredient_wrapper(ing_id, false)
 		ing_container.add_child(wrapper)
 
+
 func start_ingredient_minigame():
-	print("START MINIGAME... ")
+	print("🎮 START MINIGAME...")
 	emit_signal("ingredients_minigame_started")
 	minigame_started = true
 	var recipe_selected = GlobalManager.current_level_recipes[GlobalManager.selected_recipe_idx]
@@ -113,28 +110,27 @@ func start_ingredient_minigame():
 	btn_prepare.visible = true
 
 func animate_ingredients(ingr_loop: Array) -> void:
-	print("EMPEZAR A RECOLECTAR INGREDIENTES!!! ", ingr_loop)
-	var container := recollect_container
-	clear_children_except_bowl(container)
+	print("🍓 EMPEZAR A RECOLECTAR INGREDIENTES!!! ", ingr_loop)
+	clear_children_except_bowl(texture_rect)
 
 	var start_y := -200  
-	var end_y := recollect_container.size.y + 100 
+	var end_y := texture_rect.size.y + 100 
 	var x_positions := [150, 250, 350, 450, 550] 
 	var duration := 4.0
 	var spawn_interval := 1.1
 
 	for i in range(ingr_loop.size()):
 		var ing_id = ingr_loop[i]
-		var ingredient = create_ingredient_area2d(ing_id)  # ← CAMBIO: usar Area2D
-		container.add_child(ingredient)
+		var ingredient = create_ingredient_area2d(ing_id)
+		texture_rect.add_child(ingredient)
 
 		var x_pos = x_positions[i % x_positions.size()]
 		ingredient.position = Vector2(x_pos, start_y)
 
 		var tween := create_tween()
 		tween.tween_property(ingredient, "position:y", end_y, duration)\
-			.set_trans(Tween.TRANS_LINEAR) \
-			.set_ease(Tween.EASE_IN) \
+			.set_trans(Tween.TRANS_LINEAR)\
+			.set_ease(Tween.EASE_IN)\
 			.set_delay(spawn_interval * i)
 		tween.tween_callback(Callable(ingredient, "queue_free"))
 		
@@ -145,9 +141,6 @@ func animate_ingredients(ingr_loop: Array) -> void:
 				emit_signal("ingredients_minigame_timeout")
 			)
 
-# ========================================
-# NUEVA FUNCIÓN: Crear ingrediente como Area2D
-# ========================================
 func create_ingredient_area2d(ingredient_id: String) -> Area2D:
 	var path = "res://assets/pastry/ingredients/%s.png" % ingredient_id
 	if not ResourceLoader.exists(path):
@@ -156,28 +149,22 @@ func create_ingredient_area2d(ingredient_id: String) -> Area2D:
 
 	var tex = load(path)
 	
-	# Crear Area2D
 	var ingredient = Area2D.new()
 	ingredient.name = "Ingredient_" + ingredient_id
 	
-	# Sprite
 	var sprite = Sprite2D.new()
 	sprite.texture = tex
 	sprite.scale = Vector2(0.35, 0.35)
 	ingredient.add_child(sprite)
 	
-	# Colisión
 	var collision = CollisionShape2D.new()
 	var shape = RectangleShape2D.new()
 	shape.size = tex.get_size() * 0.35
 	collision.shape = shape
 	ingredient.add_child(collision)
 	
-	# Configurar layers
-	ingredient.collision_layer = 2  # Layer 2: ingredientes
-	ingredient.collision_mask = 4   # Mask 4: detecta bowl (layer 3)
-	
-	# Guardar tipo
+	ingredient.collision_layer = 2
+	ingredient.collision_mask = 4
 	ingredient.set_meta("food_type", ingredient_id)
 	
 	return ingredient
@@ -188,10 +175,63 @@ func clear_children(node: Node) -> void:
 		
 func clear_children_except_bowl(container: Node) -> void:
 	for child in container.get_children():
-		if child.name != "Bowl":
+		if child.name != "Bowl" and child.name != "BtnPrepareRecipe":
 			child.queue_free()
 
-# Esta función es para mostrar ingredientes en la receta (Control)
+
+func _on_recipe_1_pressed() -> void:
+	AudioManager.play_click_sfx()
+	show_selected_recipe(0)
+
+func _on_recipe_2_pressed() -> void:
+	AudioManager.play_click_sfx()
+	show_selected_recipe(1)
+
+func _on_recipe_3_pressed() -> void:
+	AudioManager.play_click_sfx()
+	show_selected_recipe(2)
+
+func _on_recipe_4_pressed() -> void:
+	AudioManager.play_click_sfx()
+	show_selected_recipe(3)
+
+func _on_btn_back_pressed() -> void:
+	AudioManager.play_click_sfx()
+	hide_recipe_container()
+	show_menu_container()
+
+func _on_btn_continue_pressed() -> void:
+	AudioManager.play_click_sfx()
+	hide_recipe_container()
+	hide_menu_container()
+	start_ingredient_minigame()
+	
+func _on_btn_prepare_recipe_pressed() -> void:
+	AudioManager.play_click_sfx()
+	GlobalManager.recipe_started = true
+	
+	if minigame_started:
+		for t in active_tweens:
+			if is_instance_valid(t):
+				t.kill()
+		active_tweens.clear()
+		
+		clear_children_except_bowl(texture_rect)
+		
+		minigame_started = false
+		btn_prepare.visible = false
+		GameController.make_newton_cook()
+
+func _on_ingredient_captured(ingredient_id: String):
+	print("🥣 Bowl capturó:", ingredient_id)
+	GlobalManager.collected_ingredients.append(ingredient_id)
+	AudioManager.play_collect_ingredient_sfx()
+	
+	if GlobalManager.collected_ingredients.size() >= 2:
+		btn_prepare.visible = true
+		btn_prepare.disabled = false
+		
+
 func create_ingredient_wrapper(ingredient_id: String, is_clickable: bool = false):
 	var path = "res://assets/pastry/ingredients/%s.png" % ingredient_id
 	if not ResourceLoader.exists(path):
@@ -216,6 +256,7 @@ func create_ingredient_wrapper(ingredient_id: String, is_clickable: bool = false
 
 	wrapper.add_child(sprite)
 	return wrapper
+
 
 func generate_arr(base: Array, base_len: int) -> Array:
 	var result = base.duplicate()
@@ -243,90 +284,3 @@ func add_random_ingredients(result: Array, source_array: Array) -> void:
 	for i in range(count):
 		var ing = source_array[randi() % source_array.size()]
 		result.append(ing.id)
-
-# Botones
-func _on_recipe_1_pressed() -> void:
-	AudioManager.play_click_sfx()
-	show_selected_recipe(0)
-
-func _on_recipe_2_pressed() -> void:
-	AudioManager.play_click_sfx()
-	show_selected_recipe(1)
-
-func _on_recipe_3_pressed() -> void:
-	AudioManager.play_click_sfx()
-	show_selected_recipe(2)
-
-func _on_recipe_4_pressed() -> void:
-	AudioManager.play_click_sfx()
-	show_selected_recipe(3)
-
-func _on_btn_back_pressed() -> void:
-	AudioManager.play_click_sfx()
-	hide_recipe_container()
-	show_menu_container()
-
-func _on_btn_continue_pressed() -> void:
-	AudioManager.play_click_sfx()
-	hide_recipe_container()
-	hide_menu_container()
-	show_recollect_container()
-	start_ingredient_minigame()
-	
-func _on_btn_prepare_recipe_pressed() -> void:
-	AudioManager.play_click_sfx()
-	GlobalManager.recipe_started = true
-	
-	if minigame_started:
-		for t in active_tweens:
-			if is_instance_valid(t):
-				t.kill()
-		active_tweens.clear()
-		
-		clear_children_except_bowl(recollect_container)
-		
-		minigame_started = false
-		btn_prepare.visible = false
-		GameController.make_newton_cook()
-
-# ========================================
-# SETUP DEL BOWL
-# ========================================
-func setup_bowl():
-	# CAMBIAR LA RUTA según donde guardaste Bowl.tscn
-	var bowl_path = "res://scenes/controllers/Bowl.tscn"
-	
-	# Verificar que existe
-	if not ResourceLoader.exists(bowl_path):
-		push_error("❌ No se encuentra Bowl.tscn en: " + bowl_path)
-		return
-	
-	var bowl_scene = load(bowl_path)
-	bowl = bowl_scene.instantiate()
-	
-	# IMPORTANTE: Agregar a la escena ANTES de configurar propiedades
-	recollect_container.add_child(bowl)
-	
-	# Esperar un frame para que el _ready() del bowl se ejecute
-	await get_tree().process_frame
-	
-	# Ahora configurar posición y límites
-	bowl.fixed_y = recollect_container.size.y - 100
-	bowl.min_x = 100
-	bowl.max_x = recollect_container.size.x - 100
-	bowl.position.y = bowl.fixed_y  # Posicionar manualmente también
-	
-	# Conectar señal de captura
-	if not bowl.is_connected("ingredient_captured", Callable(self, "_on_ingredient_captured")):
-		bowl.connect("ingredient_captured", Callable(self, "_on_ingredient_captured"))
-	
-	print("✅ Bowl configurado correctamente en Y:", bowl.position.y)
-
-func _on_ingredient_captured(ingredient_id: String):
-	print("🥣 Bowl capturó:", ingredient_id)
-	GlobalManager.collected_ingredients.append(ingredient_id)
-	AudioManager.play_collect_ingredient_sfx()
-	
-	if GlobalManager.collected_ingredients.size() >= 2:
-		btn_prepare.visible = true
-		btn_prepare.disabled = false

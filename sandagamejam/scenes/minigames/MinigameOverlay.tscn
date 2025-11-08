@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://0nbfgsjfecy8"]
+[gd_scene load_steps=17 format=3 uid="uid://0nbfgsjfecy8"]
 
 [ext_resource type="Script" uid="uid://3qg5qwd7ie6j" path="res://scripts/levels/minigame_overlay.gd" id="1_jh425"]
 [ext_resource type="Texture2D" uid="uid://cfhb4cq5golfa" path="res://assets/UI/receta_texture.png" id="2_e7l36"]
@@ -14,6 +14,10 @@
 [ext_resource type="LabelSettings" uid="uid://jdv1bfj4iff7" path="res://custom_resources/InteractionButtonLabels.tres" id="12_70k8r"]
 [ext_resource type="Texture2D" uid="uid://6fbjfmluo6hm" path="res://assets/UI/interact-btn-disabled.png" id="12_smtws"]
 [ext_resource type="Texture2D" uid="uid://bypdp632b58en" path="res://assets/pastry/bowl_back.png" id="13_70k8r"]
+[ext_resource type="Script" uid="uid://qq1phnbxctdq" path="res://scenes/minigames/bowl.gd" id="13_q84un"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_70k8r"]
+size = Vector2(174.444, 82.5)
 
 [node name="MinigameOverlay" type="Node2D"]
 script = ExtResource("1_jh425")
@@ -28,6 +32,19 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("2_e7l36")
+
+[node name="Bowl" type="Area2D" parent="TextureRect"]
+position = Vector2(340, 494)
+scale = Vector2(1.8, 1.8)
+script = ExtResource("13_q84un")
+
+[node name="Bowl" type="Sprite2D" parent="TextureRect/Bowl"]
+scale = Vector2(0.175, 0.175)
+texture = ExtResource("13_70k8r")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TextureRect/Bowl"]
+position = Vector2(0.555557, -1.25)
+shape = SubResource("RectangleShape2D_70k8r")
 
 [node name="MenuContainer" type="Control" parent="TextureRect"]
 anchors_preset = 0
@@ -171,26 +188,6 @@ grow_vertical = 2
 text = "No estoy seguro"
 label_settings = ExtResource("12_70k8r")
 horizontal_alignment = 1
-
-[node name="RecollectContainer" type="Control" parent="TextureRect"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -2.0
-offset_bottom = -1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="Bowl" type="Node2D" parent="TextureRect/RecollectContainer"]
-position = Vector2(342, 494)
-scale = Vector2(1.8, 1.8)
-
-[node name="Bowl" type="Sprite2D" parent="TextureRect/RecollectContainer/Bowl"]
-scale = Vector2(0.175, 0.175)
-texture = ExtResource("13_70k8r")
 
 [node name="BtnPrepareRecipe" type="TextureButton" parent="TextureRect"]
 visible = false
