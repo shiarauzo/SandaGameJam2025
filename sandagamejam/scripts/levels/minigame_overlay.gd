@@ -35,6 +35,73 @@ func hide_recollect_container():
 func show_recollect_container():
 	recollect_container.visible = true
 
+func fill_ingredients_textrect(instance: Node) -> void:
+	if not instance:
+		return
+	
+	var center = instance.get_node("TextureRect/CenterContainer")
+	if not center:
+		print("No se encontró el CenterContainer en IngredientsMenu")
+		return
+
+	# Limpiar hijos anteriores
+	for child in center.get_children():
+		child.queue_free()
+
+	var recipe = GlobalManager.current_level_recipes[GlobalManager.selected_recipe_idx]
+	var ingredients = recipe["ingredients"]
+
+	# Crear GridContainer con 2 columnas
+	var grid = GridContainer.new()
+	grid.columns = 2
+	grid.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	grid.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	center.add_child(grid)
+
+	for ing_id in ingredients:
+		var tex_path = "res://assets/pastry/ingredients/%s.png" % ing_id
+		if not ResourceLoader.exists(tex_path):
+			print("No existe asset:", tex_path)
+			continue
+
+		var tex = load(tex_path)
+		var tex_rect = TextureRect.new()
+		tex_rect.texture = tex
+		tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tex_rect.expand = true
+		tex_rect.custom_minimum_size = Vector2(50, 50)
+
+		var label = Label.new()
+		label.text = "x 1"
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+
+		# HBox para poner imagen y texto al costado
+		var hbox = HBoxContainer.new()
+		hbox.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		hbox.add_child(tex_rect)
+
+		var spacer = Control.new()
+		spacer.custom_minimum_size = Vector2(5, 0)
+		hbox.add_child(spacer)
+
+		hbox.add_child(label)
+
+		grid.add_child(hbox)
+
+func show_ingredients_textrect() -> Node:
+	var scene = preload("res://scenes/minigames/IngredientsMenu.tscn")
+	var instance = scene.instantiate()
+	
+	var root = get_parent() # MinigameOverlay está instanciado dentro de PastryLevel
+	if root:
+		root.add_child(instance)
+		instance.position = Vector2(100,45)
+		instance.visible = true
+		return instance
+	else:
+		print(" No se encontró el nodo padre para agregar el TextRect")
+		return null
+
 func show_selected_recipe(idx: int) -> void:
 	GlobalManager.selected_recipe_idx = idx
 	load_selected_recipe_data(idx)
@@ -252,6 +319,9 @@ func _on_btn_continue_pressed() -> void:
 	show_recollect_container()
 	start_ingredient_minigame()
 	
+	var instance = show_ingredients_textrect()
+	fill_ingredients_textrect(instance)
+	
 func _on_btn_prepare_recipe_pressed() -> void:
 	AudioManager.play_click_sfx()
 	AudioManager.stop_newton_humming_sfx()
@@ -318,3 +388,4 @@ func random_point_in_polygon(poly: PackedVector2Array) -> Vector2:
 		
 	# fallback por si no encuentra un punto después de muchos intentos
 	return poly[0]  # retorna el primer vértice del polígono
+	

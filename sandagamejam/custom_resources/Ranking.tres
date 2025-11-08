@@ -1,6 +1,6 @@
 [gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://i5q50xw1j3v2"]
 
-[ext_resource type="FontFile" uid="uid://crpc3lwujufom" path="res://assets/fonts/Libre_Baskerville/LibreBaskerville-Bold.ttf" id="1_0ld3j"]
+[ext_resource type="FontFile" uid="uid://i03kbssdqpdw" path="res://assets/fonts/Libre_Baskerville/LibreBaskerville-Bold.ttf" id="1_0ld3j"]
 
 [resource]
 font = ExtResource("1_0ld3j")

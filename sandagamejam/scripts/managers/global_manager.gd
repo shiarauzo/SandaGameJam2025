@@ -39,6 +39,7 @@ var btn_reject_recipe_label = ""
 var btn_choose_recipe_label = ""
 var btn_cook_recipe_label = ""
 var btn_continuar_label = ""
+var loading_label = ""
 
 # Estados del cliente
 enum State { ENTERING, SEATED, FAIL, SUCCESS }
@@ -75,6 +76,7 @@ func start_game():
 	is_game_running = true
 	load_texts()
 	load_button_labels()
+	load_other_labels()
 	UILayerManager.init_ui_layer()
 	UILayerManager.show_hud()
 
@@ -195,6 +197,10 @@ func load_button_labels():
 		btn_listen_customer_label = "Customer"
 		btn_help_customer_label = "Help"
 
+func load_other_labels():
+	if game_language in interaction_texts:
+		loading_label = interaction_texts[game_language]["loading"]
+		
 func get_response_texts(response: ResponseType) -> Array[String]:
 	var lang_texts: Dictionary = interaction_texts.get(game_language, {})
 	var prefix: String = response_keys.get(response, "")
@@ -226,6 +232,7 @@ func cambiar_idioma(nuevo_idioma: String) -> void:
 	game_language = nuevo_idioma
 	load_texts()            # Recarga todos los textos
 	load_button_labels()    # Recarga labels de botones
+	load_other_labels()
 	emit_signal("idioma_cambiado", game_language) # Notificar a todas las escenas activas
 
 ### ============================

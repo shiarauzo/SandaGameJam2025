@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://day0gw8i45mdc"]
+
+[ext_resource type="Texture2D" uid="uid://yxsy07s7t2f1" path="res://assets/ui/receta-btn.png" id="1_57pkt"]
+[ext_resource type="FontFile" uid="uid://di1bbtmfhsyh5" path="res://assets/fonts/Macondo/Macondo-Regular.ttf" id="2_qcyip"]
+
+[node name="IngredientsMenu" type="Node2D"]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 228.0
+offset_bottom = 172.0
+texture = ExtResource("1_57pkt")
+expand_mode = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="TextureRect"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GridContainer" type="GridContainer" parent="TextureRect/CenterContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TextureRect/CenterContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TextureRect/CenterContainer/GridContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_qcyip")
+theme_override_font_sizes/font_size = 12
+
+[node name="TextureRect" type="TextureRect" parent="TextureRect/CenterContainer/GridContainer/HBoxContainer"]
+layout_mode = 2
+expand_mode = 5
