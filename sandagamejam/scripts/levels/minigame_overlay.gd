@@ -88,6 +88,7 @@ func load_ingredients_assets():
 	var recipe_selected = GlobalManager.current_level_recipes[GlobalManager.selected_recipe_idx]
 	var ingredients = recipe_selected["ingredients"]
 
+	# Contenedor donde irán los ingredientes
 	var ing_container = recipe_container.get_node("IngredientsContainer")
 	clear_children(ing_container)
 
@@ -95,7 +96,6 @@ func load_ingredients_assets():
 		var ing_id = ingredients[i]
 		var wrapper = create_ingredient_wrapper(ing_id)
 		ing_container.add_child(wrapper)
-
 
 func start_ingredient_minigame():
 	print("START MINIGAME... ")
@@ -116,29 +116,30 @@ func animate_ingredients(ingr_loop: Array) -> void:
 	clear_children_except_bowl(container)
 
 
-	var start_y := -200 
-	var end_y := recollect_container.size.y + 100  
+	var start_y := -200  
+	var end_y := recollect_container.size.y + 100 
 	var x_positions := [150, 250, 350, 450, 550] 
 	var duration := 4.0
-	var spawn_interval := 1.1 
+	var spawn_interval := 1.1  
 
 	for i in range(ingr_loop.size()):
 		var ing_id = ingr_loop[i]
 		var wrapper = create_ingredient_wrapper(ing_id, true)
 		container.add_child(wrapper)
 
-
+	
 		var x_pos = x_positions[i % x_positions.size()]
 		wrapper.position = Vector2(x_pos, start_y)
 
 		var tween := create_tween()
-		tween.tween_property(wrapper, "position:y", end_y, duration + spawn_interval * i)\
+		
+		tween.tween_property(wrapper, "position:y", end_y, duration)\
 			.set_trans(Tween.TRANS_LINEAR) \
 			.set_ease(Tween.EASE_IN) \
 			.set_delay(spawn_interval * i)
 		tween.tween_callback(Callable(wrapper, "queue_free"))
 		
-		
+	
 		active_tweens.append(tween)
 	
 		if i == ingr_loop.size() - 1:
@@ -162,6 +163,7 @@ func create_ingredient_wrapper(ingredient_id: String, is_clickable: bool = false
 
 	var tex = load(path)
 		
+
 	var wrapper = Control.new()
 	wrapper.custom_minimum_size = tex.get_size() * 0.35 if is_clickable else tex.get_size() * 0.25
 	wrapper.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -183,7 +185,7 @@ func create_ingredient_wrapper(ingredient_id: String, is_clickable: bool = false
 	wrapper.add_child(sprite)
 	return wrapper
 
-
+# Helpers
 func generate_arr(base: Array, base_len: int) -> Array:
 	var result = base.duplicate()
 
@@ -256,7 +258,7 @@ func _on_btn_prepare_recipe_pressed() -> void:
 				t.kill()
 		active_tweens.clear()
 		
-		
+
 		clear_children(recollect_container)
 		
 		minigame_started = false
@@ -267,7 +269,7 @@ func _on_ingredient_clicked(event: InputEvent, wrapper: Control, ing_id: String)
 	if event is InputEventMouseButton and event.pressed:
 		AudioManager.play_collect_ingredient_sfx()
 		
-		
+
 		var target_pos = Vector2(
 			recollect_container.size.x / 2, 
 			recollect_container.size.y - 50
