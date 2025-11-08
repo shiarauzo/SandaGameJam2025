@@ -294,6 +294,7 @@ anchors_preset = 0
 offset_right = 1154.0
 offset_bottom = 648.0
 script = ExtResource("1_gh2yv")
+leaderboard_internal_name = "Sir Isaac's Pastry and Apple's Ranking"
 
 [node name="Background" type="TextureRect" parent="."]
 modulate = Color(0.121512, 0.0134418, 0.0559318, 0.14902)
@@ -307,10 +308,10 @@ texture = ExtResource("2_7raak")
 
 [node name="Message" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = 372.0
-offset_top = -10.0
-offset_right = 741.0
-offset_bottom = 178.0
+offset_left = 248.0
+offset_top = -300.0
+offset_right = 617.0
+offset_bottom = -112.0
 rotation = 0.0698132
 scale = Vector2(1.2, 1.2)
 texture = ExtResource("3_7raak")
@@ -329,20 +330,20 @@ vertical_alignment = 1
 [node name="Recipe" type="TextureRect" parent="."]
 modulate = Color(1, 1, 1, 0.341176)
 layout_mode = 0
-offset_left = 694.0
-offset_top = 400.0
-offset_right = 1136.0
-offset_bottom = 781.0
+offset_left = -400.0
+offset_top = 466.0
+offset_right = 42.0
+offset_bottom = 847.0
 rotation = -0.188496
 scale = Vector2(0.6, 0.6)
 texture = ExtResource("4_gh2yv")
 
 [node name="Newton" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = -208.0
-offset_top = 161.0
-offset_right = 3761.0
-offset_bottom = 3947.0
+offset_left = -500.0
+offset_top = 217.0
+offset_right = 3469.0
+offset_bottom = 4003.0
 rotation = -0.0942478
 scale = Vector2(0.135, 0.135)
 texture = ExtResource("6_nsh0p")
@@ -359,12 +360,24 @@ libraries = {
 &"": SubResource("AnimationLibrary_bome8")
 }
 
+[node name="LoadingLabel" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+label_settings = ExtResource("7_u5ho7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="ScoreContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 460.0
-offset_top = 294.0
-offset_right = 785.0
-offset_bottom = 445.0
+offset_left = 384.0
+offset_top = 900.0
+offset_right = 709.0
+offset_bottom = 1051.0
 theme_override_constants/separation = 16
 alignment = 1
 

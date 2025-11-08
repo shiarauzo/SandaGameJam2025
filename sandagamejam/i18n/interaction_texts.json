@@ -15,7 +15,8 @@
 		"recipe_correct_outcome": "[color=#397002][font_size=35]Has ganado 15 segundos.[/font_size][/color]",
 		"gravitational_feedback": "¡Genial! Capturaste un ingrediente gravitacional.",
 		"gravitational_outcome": "[color=#a40ccf][font_size=35]Ganaste una vida.[/font_size][/color]",
-		"continue": "Continuar"
+		"continue": "Continuar",
+		"loading": "Cargando"
 	},
 	"en": {
 		"customer_seated": "Hear their story.",
@@ -33,7 +34,8 @@
 		"recipe_correct_outcome": "[color=#397002][font_size=35]You gained 15 seconds.[/font_size][/color]",
 		"gravitational_feedback": "Awesome! You caught a gravitational ingredient.",
 		"gravitational_outcome": "[color=#a40ccf][font_size=35]You gained one life.[/font_size][/color]",
-		"continue": "Continue"
+		"continue": "Continue",
+		"loading": "Loading"
 	},
 	"fr": {
 		"customer_seated": "Écouter son histoire.",
@@ -51,6 +53,7 @@
 		"recipe_correct_outcome": "[color=#397002][font_size=35]Tu as gagné 15 secondes.[/font_size][/color]",
 		"gravitational_feedback": "Génial! Tu as attrapé un ingrédient gravitationnel.",
 		"gravitational_outcome": "[color=#a40ccf][font_size=35]Tu as gagné une vie.[/font_size][/color]",
-		"continue": "Continuer"
+		"continue": "Continuer",
+		"loading": "Chargement",
 	}
 }

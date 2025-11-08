@@ -19,12 +19,13 @@ signal ingredients_minigame_finished
 @onready var overlay_layer = $OverlayLayer
 var final_screen: Node = null
 
+const IS_TESTING = false
 const SCREEN_WIDTH = 1152.0
 const SECONDS_TO_LOSE = 30
 const SECONDS_TO_LOSE_NOT_PREPARED = 42
 const SECONDS_TO_GAIN = 15
-var LIVES = 3#to test 1
-var MAX_LIVES = 4#to test 2
+var LIVES = 1 if IS_TESTING else 3
+var MAX_LIVES = 2 if IS_TESTING else 4
 var ING_ARR_SIZE = 20 #Debe disminuir si el nivel aumenta
 var TIME_LEFT = 180.0
 var global_ranking: Array = []
