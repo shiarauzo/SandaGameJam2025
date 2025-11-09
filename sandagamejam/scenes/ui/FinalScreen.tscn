@@ -294,6 +294,7 @@ anchors_preset = 0
 offset_right = 1154.0
 offset_bottom = 648.0
 script = ExtResource("1_gh2yv")
+leaderboard_internal_name = "Sir Isaac's Pastry and Apple's Ranking"
 
 [node name="Background" type="TextureRect" parent="."]
 modulate = Color(0.121512, 0.0134418, 0.0559318, 0.14902)
