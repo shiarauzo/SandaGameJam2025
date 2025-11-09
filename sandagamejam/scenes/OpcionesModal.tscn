@@ -1,12 +1,12 @@
 [gd_scene load_steps=8 format=3 uid="uid://brrp3aubtiabr"]
 
 [ext_resource type="Script" uid="uid://c3ly4kmn5k6ym" path="res://scripts/opciones_modal.gd" id="1_y1he4"]
-[ext_resource type="Texture2D" uid="uid://cns6yidqqgg12" path="res://assets/backgrounds/level1.png" id="2_xevi8"]
-[ext_resource type="Texture2D" uid="uid://b5cvpb7dre038" path="res://assets/ui/text_message.png" id="3_57l0b"]
-[ext_resource type="Texture2D" uid="uid://5ombdxxdcy6j" path="res://assets/ui/ic_volume_off_fill.png" id="3_tbubh"]
-[ext_resource type="FontFile" uid="uid://di1bbtmfhsyh5" path="res://assets/fonts/Macondo/Macondo-Regular.ttf" id="4_57l0b"]
-[ext_resource type="Texture2D" uid="uid://rajs2wijos4q" path="res://assets/ui/ic_volume_on_fill.png" id="4_rckh6"]
-[ext_resource type="Texture2D" uid="uid://0h8fnyvmbmrr" path="res://assets/ui/close-btn.png" id="6_rckh6"]
+[ext_resource type="Texture2D" uid="uid://2n1ol4pwkj0p" path="res://assets/backgrounds/level1.png" id="2_xevi8"]
+[ext_resource type="Texture2D" uid="uid://d3lwpiqw5gj2j" path="res://assets/ui/text_message.png" id="3_57l0b"]
+[ext_resource type="Texture2D" uid="uid://c7orwwgt3mbq8" path="res://assets/ui/ic_volume_off_fill.png" id="3_tbubh"]
+[ext_resource type="FontFile" uid="uid://ch5rglkjpbnk2" path="res://assets/fonts/Macondo/Macondo-Regular.ttf" id="4_57l0b"]
+[ext_resource type="Texture2D" uid="uid://bgdu715qp5md0" path="res://assets/ui/ic_volume_on_fill.png" id="4_rckh6"]
+[ext_resource type="Texture2D" uid="uid://b810rbfrnlq87" path="res://assets/ui/close-btn.png" id="6_rckh6"]
 
 [node name="OpcionesModal" type="Control"]
 layout_mode = 3
@@ -37,30 +37,6 @@ offset_right = 1228.0
 offset_bottom = 819.0
 texture = ExtResource("3_57l0b")
 expand_mode = 1
-
-[node name="TextureRect3" type="TextureRect" parent="."]
-layout_mode = 0
-offset_left = 242.0
-offset_top = 223.0
-offset_right = 282.0
-offset_bottom = 263.0
-texture = ExtResource("3_tbubh")
-
-[node name="TextureRect5" type="TextureRect" parent="."]
-layout_mode = 0
-offset_left = 852.0
-offset_top = 223.0
-offset_right = 892.0
-offset_bottom = 263.0
-texture = ExtResource("4_rckh6")
-
-[node name="TextureRect6" type="TextureRect" parent="."]
-layout_mode = 0
-offset_left = 853.0
-offset_top = 328.0
-offset_right = 893.0
-offset_bottom = 368.0
-texture = ExtResource("4_rckh6")
 
 [node name="Titulo" type="Label" parent="."]
 layout_mode = 1
@@ -109,6 +85,14 @@ theme_override_font_sizes/font_size = 32
 text = "SFX"
 metadata/_edit_use_anchors_ = true
 
+[node name="SFXMute" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 242.0
+offset_top = 223.0
+offset_right = 282.0
+offset_bottom = 263.0
+texture = ExtResource("3_tbubh")
+
 [node name="SFXsLider" type="HSlider" parent="."]
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 1
@@ -120,7 +104,15 @@ offset_top = 232.0
 offset_right = 835.84
 offset_bottom = 254.0
 
-[node name="TextureRect4" type="TextureRect" parent="."]
+[node name="SFXVolumeUp" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 852.0
+offset_top = 223.0
+offset_right = 892.0
+offset_bottom = 263.0
+texture = ExtResource("4_rckh6")
+
+[node name="MusicaMute" type="TextureRect" parent="."]
 layout_mode = 0
 offset_left = 242.0
 offset_top = 327.0
@@ -138,6 +130,14 @@ offset_left = 382.0
 offset_top = 337.0
 offset_right = 842.84
 offset_bottom = 359.0
+
+[node name="MusicaVolumeUp" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 853.0
+offset_top = 328.0
+offset_right = 893.0
+offset_bottom = 368.0
+texture = ExtResource("4_rckh6")
 
 [node name="LabelMusica" type="Label" parent="."]
 layout_mode = 1
