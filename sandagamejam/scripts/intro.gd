@@ -3,6 +3,8 @@ extends Node2D
 @onready var btn_start: TextureButton = $Comenzar_Game
 @onready var text_intro: Label = $TextureRect/text_intro
 @onready var btn_back: Button = $BtnBack if has_node("BtnBack") else null 
+@onready var lbl_omit_intro: Label = $OmitIntro
+
 
 var json_texts = {
 	"es":
@@ -88,3 +90,14 @@ func _on_btn_start_pressed():
 func _on_btn_back_pressed():
 	AudioManager.play_click_sfx()
 	get_tree().change_scene_to_file("res://scenes/menus/MainMenu.tscn")
+
+func _input(event):
+	if lbl_omit_intro and lbl_omit_intro.get_global_rect().has_point(get_viewport().get_mouse_position()):
+		if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:_skip_intro()
+
+func _skip_intro():
+	AudioManager.play_click_sfx()
+	var level_1_path = "res://scenes/levels/PastryLevel1.tscn"
+	GlobalManager.start_game()
+	GameController.load_level(level_1_path)
+	GameController.show_newton_layer()
