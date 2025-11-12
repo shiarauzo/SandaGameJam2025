@@ -16,6 +16,7 @@ var active_tweens := []
 func _ready():
 	load_menu_data()
 	load_btn_labels()
+	bowl.visible = false
 	btn_prepare.anchor_top = 0.0
 	btn_prepare.anchor_bottom = 0.0
 	btn_prepare.anchor_left = 0.5
@@ -209,7 +210,10 @@ func _on_btn_continue_pressed() -> void:
 	AudioManager.play_click_sfx()
 	hide_recipe_container()
 	hide_menu_container()
+	bowl.visible = true
 	start_ingredient_minigame()
+	
+	
 	
 func _on_btn_prepare_recipe_pressed() -> void:
 	AudioManager.play_click_sfx()
@@ -223,8 +227,10 @@ func _on_btn_prepare_recipe_pressed() -> void:
 		
 		clear_children_except_bowl(texture_rect)
 		
+		
 		minigame_started = false
 		btn_prepare.visible = false
+		bowl.visible = false
 		GameController.make_newton_cook()
 
 func _on_ingredient_captured(ingredient_id: String):

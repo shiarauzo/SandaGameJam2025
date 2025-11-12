@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://cr5ibwnsui3o0"]
+[gd_scene load_steps=4 format=3 uid="uid://corqx7gp3txu4"]
 
-[ext_resource type="Script" uid="uid://b65hrsrlvb3yn" path="res://scenes/controllers/bowl.gd" id="1_7gpes"]
+[ext_resource type="Script" path="res://scenes/controllers/bowl.gd" id="1_7gpes"]
 [ext_resource type="Texture2D" uid="uid://k1lme1i021d3" path="res://assets/UI/bowl_fondo.png" id="1_gsi2g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7gpes"]

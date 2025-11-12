@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://d3jg6conh6p43"]
+[gd_scene load_steps=2 format=3 uid="uid://c871cyu185sid"]
 
 [ext_resource type="Script" uid="uid://b8ley8lry4wlv" path="res://scripts/levels/FoodItem.gd" id="1_w26rd"]
 

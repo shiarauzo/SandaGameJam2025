@@ -14,7 +14,7 @@
 [ext_resource type="LabelSettings" uid="uid://jdv1bfj4iff7" path="res://custom_resources/InteractionButtonLabels.tres" id="12_70k8r"]
 [ext_resource type="Texture2D" uid="uid://6fbjfmluo6hm" path="res://assets/UI/interact-btn-disabled.png" id="12_smtws"]
 [ext_resource type="Texture2D" uid="uid://bypdp632b58en" path="res://assets/pastry/bowl_back.png" id="13_70k8r"]
-[ext_resource type="Script" uid="uid://qq1phnbxctdq" path="res://scenes/minigames/bowl.gd" id="13_q84un"]
+[ext_resource type="Script" path="res://scenes/minigames/bowl.gd" id="13_q84un"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_70k8r"]
 size = Vector2(174.444, 82.5)
@@ -34,6 +34,7 @@ mouse_filter = 2
 texture = ExtResource("2_e7l36")
 
 [node name="Bowl" type="Area2D" parent="TextureRect"]
+visible = false
 position = Vector2(340, 494)
 scale = Vector2(1.8, 1.8)
 script = ExtResource("13_q84un")
